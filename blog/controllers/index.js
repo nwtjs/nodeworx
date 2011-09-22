@@ -7,6 +7,22 @@ module.exports = {
 	},
 
 	add: function() {
-		return 'Add Blog';
+		var Form = global.nwt.load().helper('Form');
+
+		return ['Add Blog',
+			Form.open(),
+			Form.field('Blog.title'),
+			Form.field('Blog.status', {
+				type:'select',
+				options:{
+					private: 'Private',
+					public: 'Public'
+				}
+			}),
+			Form.field('Blog.description',{
+				type:'textarea'
+			}),
+			Form.close()
+		].join('');
 	}
 }
