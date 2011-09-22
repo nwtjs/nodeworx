@@ -2,6 +2,7 @@
 
 	var nwtHelper = global.require('./helpers/NWTHelper.js');
 
+
 	/**
 	 * Html link helper
 	 */
@@ -14,20 +15,59 @@
 	}
 	global.nwt.extend(HtmlLink, nwtHelper.NWTHelperInstance);
 
+
+	/**
+	 * Renders the HtmlLink object
+	 */
 	HtmlLink.prototype.render = function() {
-		return '<a href="' + this.get('href') + '">' + this.get('content') + '</a>';
+		return '<a href="' + this.get('href') + '" ' + this._parseAttributes() + '>' + this.get('content') + '</a>';
 	};
 
+
+	/**
+	 * Html image helper
+	 */
+	function HtmlImage(args) {
+		this.src = args[0];
+		this.attributes = args[1];
+
+		HtmlLink._super.call(this, args);
+	}
+	global.nwt.extend(HtmlImage, nwtHelper.NWTHelperInstance);
+
+
+	/**
+	 * Renders the HtmlLink object
+	 */
+	HtmlImage.prototype.render = function() {
+		return '<img src="' + this.get('src') + '" ' + this._parseAttributes() + '>';
+	};
+
+
+
+	/**
+	 * @constructor
+	 */
 	function HtmlHelper() {
 		
 	}
 
+
+	/**
+	 * Returns a link helper object
+	 * @see HtmlLink
+	 */
 	HtmlHelper.prototype.link = function() {
 		return new HtmlLink(arguments);
 	};
 
-	HtmlHelper.prototype.toString = function() {
-		return this.render();
+
+	/**
+	 * Returns an image helper object
+	 * @see HtmlImage
+	 */
+	HtmlHelper.prototype.image = function() {
+		return new HtmlImage(arguments);
 	};
 
 	root.HtmlHelper = new HtmlHelper();
