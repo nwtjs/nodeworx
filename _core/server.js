@@ -27,7 +27,7 @@ function getServer(definition) {
 			content = require('./../' + definition.folder + '/controllers/' + controller + '.js')[action]();
 		} catch(e) {
 			content = 'Could not load entrypoint at: ' + definition.folder + '/controllers/' + controller + '/' + action;
-			console.log(content, e);
+			console.log(content, e, JSON.stringify(e));
 		}
 
 		// Append empty string to always trigger the toString method
