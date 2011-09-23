@@ -6,7 +6,7 @@
 			port : 8080
 		},
 		{
-			folder : 'ecommerce',
+			folder : 'chat',
 			port : 9090
 		}
 	];
