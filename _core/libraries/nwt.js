@@ -68,6 +68,11 @@
 			return helperClass;
 		};
 
+		NWTLoader.prototype.library = function(library) {
+			var helperClass = require('./../libraries/' + library+ '.js')[library];
+			return helperClass;
+		};
+
 		return new NWTLoader();
 	};
 

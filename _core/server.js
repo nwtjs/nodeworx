@@ -6,6 +6,7 @@ global.require = function(lib) {
 var connections = require('./../config.connections.js').connections,
 url = require('url'),
 nwt = require('./libraries/nwt.js'),
+fs = require('fs'),
 http = require('http');
 
 function getServer(definition) {
@@ -18,13 +19,24 @@ function getServer(definition) {
 			content = '';
 
 		console.log('Request URL parts: ', reqParts);
-		//urlParts.pathname
 
 		response.writeHead(200, {"Content-Type": "text/html"});
 
 		// Require the controller for the application we've requested
 		try {
-			content = require('./../' + definition.folder + '/controllers/' + controller + '.js')[action]();
+			var controllerClass = require('./../' + definition.folder + '/controllers/' + controller + '.js')[action];
+
+			// Now load in the layout file
+			// Read the file and perform an eval on it, this is how we will typically access templates to keep them clean
+			var layoutTemplate = 'default',
+				NWTLayout = global.nwt.load().library('NWTLayout');
+
+			eval(fs.readFileSync(__dirname + '/../' + definition.folder + '/views/layouts/' + layoutTemplate + '.js')+'');
+
+			NWTLayout._loadController(controllerClass);
+
+			content = NWTLayout + '';
+
 		} catch(e) {
 			content = 'Could not load entrypoint at: ' + definition.folder + '/controllers/' + controller + '/' + action;
 			console.log(content, e, JSON.stringify(e));

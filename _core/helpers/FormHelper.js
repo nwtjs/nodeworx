@@ -1,6 +1,6 @@
 (function(root) {
 
-	var nwtHelper = global.require('./helpers/NWTHelper.js');
+	var nwtHelper = global.require('./../libraries/NWTHelper.js');
 
 	/**
 	 * Form field helper
