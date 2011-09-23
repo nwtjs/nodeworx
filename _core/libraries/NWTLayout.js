@@ -38,7 +38,7 @@
 	function NWTLayoutContent(nwtLayout) {
 		this.nwtLayout = nwtLayout;
 	}
-	global.nwt.extend(NWTLayoutTitle, NWTLayoutNode);
+	global.nwt.extend(NWTLayoutContent, NWTLayoutNode);
 
 
 	/**
