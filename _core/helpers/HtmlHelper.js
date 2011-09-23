@@ -1,6 +1,6 @@
 (function(root) {
 
-	var nwtHelper = global.require('./../libraries/NWTHelper.js');
+	var nwtHelperInstance = global.nwt.load().library('NWTHelperInstance');
 
 
 	/**
@@ -13,7 +13,7 @@
 
 		HtmlLink._super.call(this, args);
 	}
-	global.nwt.extend(HtmlLink, nwtHelper.NWTHelperInstance);
+	global.nwt.extend(HtmlLink, nwtHelperInstance);
 
 
 	/**
@@ -33,7 +33,7 @@
 
 		HtmlLink._super.call(this, args);
 	}
-	global.nwt.extend(HtmlImage, nwtHelper.NWTHelperInstance);
+	global.nwt.extend(HtmlImage, nwtHelperInstance);
 
 
 	/**

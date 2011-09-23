@@ -1,6 +1,6 @@
 (function(root) {
 
-	var nwtHelper = global.require('./../libraries/NWTHelper.js');
+	var nwtHelperInstance = global.nwt.load().library('NWTHelperInstance');
 
 	/**
 	 * Form field helper
@@ -16,7 +16,7 @@
 
 		FormField._super.call(this, attributes);
 	}
-	global.nwt.extend(FormField, nwtHelper.NWTHelperInstance);
+	global.nwt.extend(FormField, nwtHelperInstance);
 
 
 	/**
