@@ -22,6 +22,11 @@ module.exports = {
 			Form.field('Blog.description',{
 				type:'textarea'
 			}),
+			Form.field('Blog.tos_agree', {
+				'type' : 'checkbox',
+				'label' : 'Agree to the terms of service?'
+			}),
+			Form.submit('Submit!'),
 			Form.close()
 		].join('');
 	}
