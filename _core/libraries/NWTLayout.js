@@ -45,7 +45,7 @@
 	 * Returns the content of this page
 	 */
 	NWTLayoutContent.prototype.toString = function() {
-		return this.nwtLayout.content || '&nbsp;';
+		return this.nwtLayout.content + '' || '&nbsp;';
 	};
 
 
@@ -64,7 +64,7 @@
 	NWTLayout.prototype._getTag = function(tag, spec) {
 		var content = '<' + tag + '>';
 
-		if( spec instanceof NWTLayoutNode ) {
+		if( spec instanceof NWTLayoutNode || spec.isRenderable !== undefined ) {
 
 			content += spec;
 

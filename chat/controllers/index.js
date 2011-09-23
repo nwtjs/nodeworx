@@ -1,7 +1,12 @@
+var Form = global.nwt.load().helper('Form');
+
 module.exports = {
 	index : function() {
-		this.pageTitle = 'Here is my page title';
+		this.pageTitle = 'NWT Chat Application';
 
-		this.content = 'Here is the page content';
+		this.content = Form.open() + 
+			Form.field('Chat.line', {type: 'textarea'}) +
+			Form.submit('Send') +
+		Form.close();
 	}
 }
