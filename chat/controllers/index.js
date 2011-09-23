@@ -1,5 +1,7 @@
 module.exports = {
 	index : function() {
-		return 'Chat';
+		this.pageTitle = 'Here is my page title';
+
+		this.content = 'Here is the page content';
 	}
 }
