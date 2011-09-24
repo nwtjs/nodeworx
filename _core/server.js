@@ -23,6 +23,7 @@ function getServer(definition) {
 			controller = reqParts[0].length > 0 && reqParts[0].length > 0 ? reqParts[0] : 'index',
 			action = reqParts[1] && reqParts[1].length > 0 && reqParts[1].length > 0 ? reqParts[1] : 'index',
 			content = '';
+
 		console.log('Request for: ' , filename);
 		// If it's a request for a whitelisted file type, stream it
 		if( /\.[a-zA-Z]+$/.test(filename) ) {
@@ -61,11 +62,24 @@ function getServer(definition) {
 				// Now load in the layout file
 				// Read the file and perform an eval on it, this is how we will typically access templates to keep them clean
 				var layoutTemplate = 'default',
-					NWTLayout = global.nwt.load().library('NWTLayout');
+					NWTLayout = global.nwt.load().library('NWTLayout'),
+
+					// Holds request params that came in from a /key/value format
+					params = {};
+
+				// Get the request params
+				for( var i = 2 , param ; param = reqParts[i] ; i+=2 ) {
+					params[param] = reqParts[(i+1)];
+				}
+
+				// Set the ajax layout file
+				if( params.ajax ) {
+					layoutTemplate = 'empty';
+				}
 
 				eval(fs.readFileSync(__dirname + '/../' + definition.folder + '/views/layouts/' + layoutTemplate + '.js')+'');
 	
-				NWTLayout._loadController(controllerClass);
+				NWTLayout._loadController(controllerClass, params);
 	
 				content = NWTLayout + '';
 	

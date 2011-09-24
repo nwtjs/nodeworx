@@ -6,6 +6,8 @@ function NWTSocketInstance(params) {
 	var mythis = this;
 
 	this.resource = params[0];
+	this.resource += ( this.resource.substring(0, this.resource.length - 1) == '/' ? '' : '/' ) + 'ajax/1/';
+
 	this.config = params[1] || {};
 
 	// Default some stuff

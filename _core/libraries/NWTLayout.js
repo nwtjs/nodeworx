@@ -116,6 +116,23 @@
 	 * Renders the entire content of the layout
 	 */
 	NWTLayout.prototype.toString = function() {
+
+		// Handle JSON layout
+		if( this.json ) {
+
+			var json = {};
+			for( var i in this.json ) {
+				if( this.json[i] instanceof NWTLayoutNode ) {
+					json[i] = this.json[i].toString();
+				} else {
+					json[i] = this.json[i];
+				}
+			}
+
+			return JSON.stringify(json);
+		}
+
+		// Standard shell layout
 		var content=['<!DOCTYPE html><html>'];
 
 		for( var i in this.definition ) {
@@ -130,11 +147,20 @@
 		return content.join('');
 	};
 
+
 	/**
-	 * Wraps a layout
+	 * Wraps a layout with a full HTML shell
 	 */
-	NWTLayout.prototype.wrap = function(definition) {
+	NWTLayout.prototype.shell = function(definition) {
 		this.definition = definition;
+	};
+
+
+	/**
+	 * Wraps an empty layout
+	 */
+	NWTLayout.prototype.empty = function(json) {
+		this.json = json;
 	};
 
 

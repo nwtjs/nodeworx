@@ -3,9 +3,13 @@ function NWTTabView() {
 }
 
 NWTTabView.prototype.open = function(el) {
-	nwt.socket.send(el.get('href'),{
-		success: function() {
-			alert('got success');
+
+	var resource = el.get('href');
+	resource = resource.replace('/#!', '');
+
+	nwt.socket.send(resource,{
+		success: function(response) {
+			el.ancestor('.TabView').one('.TabContent').setContent(response.content);
 		}
 	});
 };
