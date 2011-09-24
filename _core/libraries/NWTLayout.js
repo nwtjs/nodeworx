@@ -104,6 +104,9 @@
 
 		content.push('</html>');
 
+		// Reset the definition after rendering due to Node.js module caching
+		this.definition = {};
+
 		return content.join('');
 	};
 
@@ -130,6 +133,6 @@
 		return new NWTLayoutContent(this);
 	};
 
-	exports.NWTLayout = new NWTLayout();
+	exports.NWTLayout = NWTLayout;
 
 }(this));

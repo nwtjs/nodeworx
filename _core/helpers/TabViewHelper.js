@@ -1,6 +1,6 @@
 (function(root) {
 
-	var nwtHelperInstance = global.nwt.load().library('NWTHelperInstance'),
+	var nwtHelperInstance = global.nwt.load().library('NWTHelperInstance', false),
 		Html = global.nwt.load().helper('Html');
 
 	function TabViewInstance() {
@@ -37,6 +37,10 @@
 		}
 
 		content.push('</ul><div class="TabContent"></div></div>');
+
+		// Reset the tabs
+		this.tabs = [];
+
 		return content.join('');
 	};
 
@@ -48,5 +52,5 @@
 		return new TabViewInstance();
 	};
 
-	root.TabViewHelper = new TabViewHelper();
+	root.TabViewHelper = TabViewHelper;
 }(this));

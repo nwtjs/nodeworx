@@ -1,6 +1,6 @@
 (function(root) {
 
-	var nwtHelperInstance = global.nwt.load().library('NWTHelperInstance');
+	var nwtHelperInstance = global.nwt.load().library('NWTHelperInstance', false);
 
 	/**
 	 * Form field helper
@@ -136,6 +136,6 @@
 		return new FormField(arguments);
 	};
 
-	root.FormHelper = new FormHelper();
+	root.FormHelper = FormHelper;
 
 }(this));
