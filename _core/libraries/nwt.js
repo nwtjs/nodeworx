@@ -76,5 +76,19 @@
 		return new NWTLoader();
 	};
 
+
+	/**
+	 * Adds a script onto the stack of script to include
+	 * These scripts are pulled in at render time
+	 * @param string Script bundle name
+	 */
+	NWTUtils.prototype.requireScript = function(script) {
+		var context = global.context();
+		if( !context.clientScripts) {
+			context.clientScripts = [];
+		}
+		context.clientScripts.push(script);
+	};
+
 	global.nwt = new NWTUtils();
 }(this));

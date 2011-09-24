@@ -1,8 +1,3 @@
-global.require = function(lib) {
-	var lib = require(lib);
-	return lib;
-};
-
 var connections = require('./../config.connections.js').connections,
 url = require('url'),
 nwt = require('./libraries/nwt.js'),
@@ -19,7 +14,7 @@ function getServer(definition) {
 			controller = reqParts[0].length > 0 && reqParts[0].length > 0 ? reqParts[0] : 'index',
 			action = reqParts[1] && reqParts[1].length > 0 && reqParts[1].length > 0 ? reqParts[1] : 'index',
 			content = '';
-
+		console.log('Request for: ' , filename);
 		// If it's a request for a whitelisted file type, stream it
 		if( /\.[a-zA-Z]+$/.test(filename) ) {
 
@@ -36,13 +31,18 @@ function getServer(definition) {
 	
 			// Require the controller for the application we've requested
 			try {
-				var controllerClass = require('./../' + definition.folder + '/controllers/' + controller + '.js')[action];
+				var controllerClass = require('./../' + definition.folder + '/controllers/' + controller + '.js')[action]
+					contextObject = {};
+
+				global.context = function() {
+					return contextObject;
+				};
 	
 				// Now load in the layout file
 				// Read the file and perform an eval on it, this is how we will typically access templates to keep them clean
 				var layoutTemplate = 'default',
 					NWTLayout = global.nwt.load().library('NWTLayout');
-	
+//console.log('NWTLayout is: ', NWTLayout);
 				eval(fs.readFileSync(__dirname + '/../' + definition.folder + '/views/layouts/' + layoutTemplate + '.js')+'');
 	
 				NWTLayout._loadController(controllerClass);
@@ -51,8 +51,11 @@ function getServer(definition) {
 	
 			} catch(e) {
 				content = 'Could not load entrypoint at: ' + definition.folder + '/controllers/' + controller + '/' + action;
-				console.log(content, e, JSON.stringify(e));
+				console.log(content + '', e, e.stack);
 			}
+
+			// Reset the context holder
+			contextObject = {};
 	
 			// Append empty string to always trigger the toString method
 			response.end(content + '');

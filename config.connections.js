@@ -2,12 +2,8 @@
 
 	root.connections = [
 		{
-			folder : 'blog',
+			folder : 'nwt',
 			port : 8080
-		},
-		{
-			folder : 'chat',
-			port : 9090
 		}
 	];
 
