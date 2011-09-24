@@ -7,12 +7,27 @@ function NWTNodeInstance(node) {
 }
 
 
+/**
+ * Sets the content of the node
+ * @param string Content to set
+ */
 NWTNodeInstance.prototype.setContent = function(content) {
 	this._node.innerHTML = content;
 };
 
+
+/**
+ * Gets an attribute from the node
+ * @param string Attribute to get
+ */
+NWTNodeInstance.prototype.get = function(property) {
+	return this._node[property];
+};
+
 NWTNodeInstance.prototype.on = function(event, callback) {
-	this._node.addEventListener(event, callback, false);
+	this._node.addEventListener(event, function(e) {
+		callback(new NWTEventWrapper(e));
+	}, false);
 };
 
 
@@ -54,8 +69,12 @@ function NWTNode() {
  * @constructor
  */
 NWTNode.prototype.one = function(selector) {
-	var node = Sizzle(selector);
-	return new NWTNodeInstance(node[0]);
+	if( typeof selector == 'string' ) {
+		var node = Sizzle(selector);
+		return new NWTNodeInstance(node[0]);
+	} else {
+		return new NWTNodeInstance(selector);
+	}
 };
 
 

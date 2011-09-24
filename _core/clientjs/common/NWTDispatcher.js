@@ -1,6 +1,6 @@
-function NWTDispatcher() {
-	this.classPattern = new RegExp(/(nwt-)(.[^\s*$]*)/);
+var classPattern = new RegExp(/(nwt-)(.[^\s*$]*)/);
 
+function NWTDispatcher() {
 	nwt.one('body').on('click', this.dispatch);
 }
 
@@ -14,18 +14,19 @@ NWTDispatcher.prototype.dispatch = function(e) {
 	var target = e.target,
 		handlerFound = false;
 
-	while( target.parentNode ) {
+	while( target.get('parentNode') ) {
 
-		if ( target.nodeName.toUpperCase() !== "A" && target.nodeName.toUpperCase() !== "INPUT" ) { return; }
+		if ( target.get('nodeName').toUpperCase() !== "A" && target.get('nodeName').toUpperCase() !== "INPUT" ) { return; }
 
-		if ( target.className.indexOf('nwt-') !== -1 ) {
-			var actions = this.classPattern.exec(target.className);
+		if ( target.get('className').indexOf('nwt-') !== -1 ) {
+			var actions = classPattern.exec(target.get('className'));
 
 			// Call the callback with the correct scope
 			var actionParts = actions[2].split('-'),
 				callback = nwt;
 
-			for( var i = 1, nextClass; nextClass = actionParts[i]; i++ ) {
+			for( var i = 0, nextClass; nextClass = actionParts[i]; i++ ) {
+				console.log(callback, nextClass);
 				callback = callback[nextClass];
 			}
 
@@ -38,13 +39,13 @@ NWTDispatcher.prototype.dispatch = function(e) {
 			return;
 		}
 
-		target = target.parentNode;
+		target = target.get('parentNode');
 	}
 
 	// If we found a callback, we usually want to stop the event
 	// Except for input elements (still want checkboxes to check and stuff)
-	if( handlerFound && target.nodeName.toUpperCase() !== "INPUT") {
-		e.preventDefault();
+	if( handlerFound && target.get('nodeName').toUpperCase() !== "INPUT") {
+		e.stop();
 	}
 
 	return;
