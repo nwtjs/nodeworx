@@ -3,7 +3,11 @@ function NWTTabView() {
 }
 
 NWTTabView.prototype.open = function(el) {
-	console.log('TabView triggered', el);
+	nwt.socket.send(el.get('href'),{
+		success: function() {
+			alert('got success');
+		}
+	});
 };
 
 nwt.tabview = new NWTTabView();
