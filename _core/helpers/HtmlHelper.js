@@ -1,6 +1,6 @@
 (function(root) {
 
-	var nwtHelperInstance = global.nwt.load().library('NWTHelperInstance');
+	var nwtHelperInstance = global.nwt.load().library('NWTHelperInstance', false);
 
 
 	/**
@@ -70,7 +70,7 @@
 		return new HtmlImage(arguments);
 	};
 
-	root.HtmlHelper = new HtmlHelper();
+	root.HtmlHelper = HtmlHelper;
 
 
 }(this));

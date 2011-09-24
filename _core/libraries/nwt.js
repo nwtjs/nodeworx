@@ -62,15 +62,25 @@
 
 		function NWTLoader() {}
 
-		NWTLoader.prototype.helper = function(helper) {
+		NWTLoader.prototype.helper = function(helper, instantiate) {
 			var className = helper + 'Helper',
 				helperClass = require('./../helpers/' + className + '.js')[className];
-			return helperClass;
+
+			if( typeof instantiate === 'undefined' ) {
+				return new helperClass();
+			} else {
+				return helperClass;
+			}
 		};
 
-		NWTLoader.prototype.library = function(library) {
-			var helperClass = require('./../libraries/' + library+ '.js')[library];
-			return helperClass;
+		NWTLoader.prototype.library = function(library, instantiate) {
+			var libraryClass = require('./../libraries/' + library+ '.js')[library];
+
+			if( typeof instantiate === 'undefined' ) {
+				return new libraryClass();
+			} else {
+				return libraryClass;
+			}
 		};
 
 		return new NWTLoader();
