@@ -1,3 +1,7 @@
+/**
+ * NWT primary entry point
+ * @constructor
+ */
 function NWT() {
 
 };

@@ -51,7 +51,7 @@ function getServer(definition) {
 				var controllerClass = require('./../' + definition.folder + '/controllers/' + controller + '.js')[action]
 					contextObject = {
 						// Default the client scripts
-						clientScripts : ['external/sizzle', 'common/NWTBase', 'common/NWTNode', 'common/NWTDispatcher']
+						clientScripts : ['external/sizzle', 'common/NWTBase','common/NWTEventWrapper',  'common/NWTNode', 'common/NWTDispatcher']
 					};
 
 				global.context = function() {

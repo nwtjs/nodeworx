@@ -33,7 +33,7 @@
 		var content = ['<div class="TabView"><ul>'];
 
 		for( var i = 0, tab; tab = this.tabs[i] ; i++ ) {
-			content.push('<li>' + Html.link(tab.label, '#') + '</li>');
+			content.push('<li>' + Html.link(tab.label, '/#!/' + tab.resource.join('/'), {class: 'nwt-tabview-open'}) + '</li>');
 		}
 
 		content.push('</ul><div class="TabContent"></div></div>');
