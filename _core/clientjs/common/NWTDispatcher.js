@@ -1,4 +1,4 @@
-var classPattern = new RegExp(/(nwt-)(.[^\s*$]*)/);
+var classPattern = new RegExp(/(nwt_)(.[^\s*$]*)/);
 
 function NWTDispatcher() {
 	nwt.one('body').on('click', this.dispatch);
@@ -18,11 +18,11 @@ NWTDispatcher.prototype.dispatch = function(e) {
 
 		if ( target.get('nodeName').toUpperCase() !== "A" && target.get('nodeName').toUpperCase() !== "INPUT" ) { return; }
 
-		if ( target.get('className').indexOf('nwt-') !== -1 ) {
+		if ( target.get('className').indexOf('nwt_') !== -1 ) {
 			var actions = classPattern.exec(target.get('className'));
 
 			// Call the callback with the correct scope
-			var actionParts = actions[2].split('-'),
+			var actionParts = actions[2].split('_'),
 				callback = nwt;
 
 			for( var i = 0, nextClass; nextClass = actionParts[i]; i++ ) {
