@@ -9,7 +9,7 @@ NWTTabView.prototype.open = function(el) {
 
 	nwt.socket.send(resource,{
 		success: function(response) {
-			el.ancestor('.TabView').one('.TabContent').setContent(response.content);
+			el.ancestor('.tab_view').one('.tab_content').setContent(response.content);
 		}
 	});
 };
