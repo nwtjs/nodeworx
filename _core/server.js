@@ -5,12 +5,21 @@ fs = require('fs'),
 http = require('http'),
 path = require('path');
 
+var mimeTypes = {
+    "html": "text/html",
+    "jpeg": "image/jpeg",
+    "jpg": "image/jpeg",
+    "png": "image/png",
+    "js": "text/javascript",
+    "css": "text/css"};
+
 function getServer(definition) {
 
 	var server = http.createServer(function (request, response) {
 
-		var filename = './' + definition.folder + url.parse(request.url).pathname;
-			reqParts = url.parse(request.url).pathname.substring(1).split('/'),
+		var pathname = url.parse(request.url).pathname,
+			filename = './' + (pathname.indexOf('_core') === -1 ? definition.folder  : '' ) + pathname;
+			reqParts = pathname.substring(1).split('/'),
 			controller = reqParts[0].length > 0 && reqParts[0].length > 0 ? reqParts[0] : 'index',
 			action = reqParts[1] && reqParts[1].length > 0 && reqParts[1].length > 0 ? reqParts[1] : 'index',
 			content = '';
@@ -20,9 +29,17 @@ function getServer(definition) {
 
 			// The file exists, stream it
 			path.exists(filename, function(exists) {
+				console.log('serving', exists);
 				if( exists ) {
+
+					var mimeType = mimeTypes[path.extname(filename).split(".")[1]];
+					console.log(mimeType);
+					response.writeHead(200, {'Content-Type':mimeType});
+
 					var fileStream = fs.createReadStream(filename);
 					fileStream.pipe(response);
+				} else {
+					response.end();
 				}
 			});
 		
@@ -32,7 +49,10 @@ function getServer(definition) {
 			// Require the controller for the application we've requested
 			try {
 				var controllerClass = require('./../' + definition.folder + '/controllers/' + controller + '.js')[action]
-					contextObject = {};
+					contextObject = {
+						// Default the client scripts
+						clientScripts : ['external/sizzle', 'common/NWTBase', 'common/NWTNode', 'common/NWTDispatcher']
+					};
 
 				global.context = function() {
 					return contextObject;
@@ -42,7 +62,7 @@ function getServer(definition) {
 				// Read the file and perform an eval on it, this is how we will typically access templates to keep them clean
 				var layoutTemplate = 'default',
 					NWTLayout = global.nwt.load().library('NWTLayout');
-//console.log('NWTLayout is: ', NWTLayout);
+
 				eval(fs.readFileSync(__dirname + '/../' + definition.folder + '/views/layouts/' + layoutTemplate + '.js')+'');
 	
 				NWTLayout._loadController(controllerClass);

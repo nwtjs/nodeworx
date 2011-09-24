@@ -78,9 +78,29 @@
 			}
 		}
 
+		// Special processing for the </body> tag
+		if( tag === 'body' ) {
+			content += this._beforeBody();
+		}
+
 		content += '</' + tag + '>';
 		
 		return content;
+	};
+
+
+	/**
+	 * Renders framework things before the body tag including javascriptz
+	 */
+	NWTLayout.prototype._beforeBody = function() {
+
+		var content = [];
+
+		for( var i = 0, script ; script = global.context().clientScripts[i] ; i++ ) {
+			content.push('<script type="text/javascript" src="/_core/clientjs/' + script + '.js"></script>');			
+		}
+
+		return content.join('');
 	};
 
 

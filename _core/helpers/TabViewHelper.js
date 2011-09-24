@@ -28,7 +28,7 @@
 	 */
 	TabViewInstance.prototype.render = function() {
 
-		global.nwt.requireScript('TabView');
+		global.nwt.requireScript('widgets/TabView');
 
 		var content = ['<div class="TabView"><ul>'];
 
