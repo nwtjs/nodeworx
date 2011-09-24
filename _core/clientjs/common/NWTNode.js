@@ -8,11 +8,31 @@ function NWTNodeInstance(node) {
 
 
 /**
- * Sets the content of the node
- * @param string Content to set
+ * Returns the ancestor that matches the css selector
+ * Implements Sizzle.matches
+ * @param string CSS Selector
  */
-NWTNodeInstance.prototype.setContent = function(content) {
-	this._node.innerHTML = content;
+NWTNodeInstance.prototype.ancestor = function(selector) {
+
+	var testNode = this._node,
+		ancestor = null;
+
+	while( true ) {
+
+		var ancestor = Sizzle.matches(selector, [testNode]);
+		if( ancestor.length > 0 ) { break; }
+
+		var parentNode = testNode.parentNode;
+
+		if( !parentNode ) { break; }
+		testNode = parentNode;
+	}
+
+	if( ancestor[0] ) {
+		return new NWTNodeInstance(ancestor[0]);
+	} else {
+		return null;
+	}
 };
 
 
@@ -24,6 +44,12 @@ NWTNodeInstance.prototype.get = function(property) {
 	return this._node[property];
 };
 
+
+/**
+ * Adds an event listener tot he node
+ * @param string Event to listen for
+ * @param function Event callback function
+ */
 NWTNodeInstance.prototype.on = function(event, callback) {
 	this._node.addEventListener(event, function(e) {
 		callback(new NWTEventWrapper(e));
@@ -31,8 +57,37 @@ NWTNodeInstance.prototype.on = function(event, callback) {
 };
 
 
-NWTNodeInstance.prototype.one = function(selector) {};
-NWTNodeInstance.prototype.all = function(selector) {};
+
+/**
+ * Sets the content of the node
+ * @param string Content to set
+ */
+NWTNodeInstance.prototype.setContent = function(content) {
+	this._node.innerHTML = content;
+};
+
+
+/**
+ * Returns a child node instance based on a selector
+ * Implements Sizzle
+ * @param string CSS Selector
+ */
+NWTNodeInstance.prototype.one = function(selector) {
+	var node = Sizzle(selector, this._node);
+	return new NWTNodeInstance(node[0]);
+};
+
+
+/**
+ * Returns a child nodelist based on a selector
+ * Implements Sizzle
+ * @param string CSS Selector
+ */
+NWTNodeInstance.prototype.all = function(selector) {
+	var nodelist = Sizzle(selector, this._node);
+	return new NWTNodeList(nodelist);
+};
+
 
 /**
  * A node iterator
