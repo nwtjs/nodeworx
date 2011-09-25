@@ -4,6 +4,30 @@
 
 
 	/**
+ 	* Returns a NWTStdHtmlElement object
+	*/
+	function NWTStdHtmlElementWrapper(elem) {
+		var mythis = this;
+		return function(content, attributes) {
+			return new NWTStdHtmlElement(elem, content, attributes);
+		}
+	}
+
+	function NWTStdHtmlElement(tag, content, attributes) {
+		console.log('Creating std element');
+		this.tag = tag;
+		this.content = content;	
+		this.attributes = attributes;
+	};
+	global.nwt.extend(NWTStdHtmlElement, nwtHelperInstance);
+
+
+	NWTStdHtmlElement.prototype.render = function() {
+		return '<' + this.tag + ' ' + this._parseAttributes() + '>' + this.content + '</' + this.tag + '>';
+	};
+
+
+	/**
 	 * Html link helper
 	 */
 	function HtmlLink(args) {
@@ -49,7 +73,11 @@
 	 * @constructor
 	 */
 	function HtmlHelper() {
-		
+		var stdElements = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p','blockquote'];
+
+		for ( var i = 0 , elem ; elem = stdElements[i] ; i++ ) {
+			this[elem] = new NWTStdHtmlElementWrapper(elem);
+		}
 	}
 
 
