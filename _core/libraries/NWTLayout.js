@@ -30,7 +30,6 @@
 		for( var i = 0, helper ; helper = helpers[i] ; i++ ) {
 			eval('var ' + helper + ' = global.nwt.load().helper(\'' + helper + '\');');
 		}
-
 		eval('this.definition = ' + viewContent + ';');
 	};
 
