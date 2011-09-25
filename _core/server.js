@@ -49,7 +49,7 @@ function getServer(definition) {
 	
 			// Require the controller for the application we've requested
 			try {
-				var controllerClass = require('./../' + definition.folder + '/controllers/' + controller + '.js')[action]
+				var viewContent = fs.readFileSync(__dirname  + '/../' + definition.folder + '/views/' + controller + '/' + action + '.js')
 					contextObject = {
 						// Default the client scripts
 						clientScripts : ['external/sizzle', 'common/NWTBase', 'common/NWTEventWrapper', 'common/NWTNode', 'common/NWTSocket', 'common/NWTDispatcher']
@@ -61,11 +61,12 @@ function getServer(definition) {
 	
 				// Now load in the layout file
 				// Read the file and perform an eval on it, this is how we will typically access templates to keep them clean
-				var layoutTemplate = 'default',
-					NWTLayout = global.nwt.load().library('NWTLayout'),
+				var NWTLayout = global.nwt.load().library('NWTLayout'),
 
 					// Holds request params that came in from a /key/value format
 					params = {};
+
+				params.layout = 'default'
 
 				// Get the request params
 				for( var i = 2 , param ; param = reqParts[i] ; i+=2 ) {
@@ -74,12 +75,10 @@ function getServer(definition) {
 
 				// Set the ajax layout file
 				if( params.ajax ) {
-					layoutTemplate = 'empty';
+					params.layout = 'empty';
 				}
 
-				eval(fs.readFileSync(__dirname + '/../' + definition.folder + '/views/layouts/' + layoutTemplate + '.js')+'');
-	
-				NWTLayout._loadController(controllerClass, params);
+				NWTLayout._loadView(viewContent, params);
 	
 				content = NWTLayout + '';
 	
