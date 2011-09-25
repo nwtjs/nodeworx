@@ -1,5 +1,4 @@
 function NWTTabView() {
-	
 }
 
 NWTTabView.prototype.open = function(el) {
@@ -15,3 +14,10 @@ NWTTabView.prototype.open = function(el) {
 };
 
 nwt.tabview = new NWTTabView();
+
+
+        // preload any tabs with the calss of "nwt_tabview_selected"
+        nwt.all('li.nwt_tabview_selected').each(function(el){
+                el.one('a').click();
+        });
+
