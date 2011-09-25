@@ -88,13 +88,25 @@ NWTNodeInstance.prototype.all = function(selector) {
 	return new NWTNodeList(nodelist);
 };
 
+NWTNodeInstance.prototype.click = function() {
+
+	var evt = document.createEvent("HTMLEvents");
+	evt.initEvent('click', true, true ); // event type,bubbling,cancelable
+	return !this._node.dispatchEvent(evt);
+};
+
 
 /**
  * A node iterator
  * @constructor
  */
-function NWTNodeList() {
-	
+function NWTNodeList(nodes) {
+	var wrappedNodes = [];
+
+	for( var i = 0, node ; node = nodes[i] ; i++  ) {
+		wrappedNodes.push(new NWTNodeInstance(node));
+	}  
+	this.nodes = wrappedNodes;
 }
 
 
