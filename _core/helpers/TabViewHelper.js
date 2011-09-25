@@ -4,6 +4,9 @@
 		Html = global.nwt.load().helper('Html');
 
 	function TabViewInstance() {
+
+		global.context().clientScripts.push('widgets/TabView');
+
 		this.tabs = [];
 		TabViewInstance._super.call(this);
 	}
