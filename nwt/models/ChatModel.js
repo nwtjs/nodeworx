@@ -4,6 +4,8 @@
 
 	function ChatModel() {
 
+		this.tableName = 'chat';
+
 		this.fields = {
 			id : 'integer',
 			content : 'string',
