@@ -15,6 +15,14 @@
 	}
 	global.nwt.extend(ChatModel, NWTModel);
 
+
+	/**
+	 * Generate the recent chat records
+	 */
+	ChatModel.prototype.recent = function() {
+		return this.all({order:{id:'desc'}, limit:10});
+	};
+
 	exports.ChatModel = ChatModel;
 
 }(this));

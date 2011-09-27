@@ -71,13 +71,13 @@
 	 * If we have not fetched the data, do so
 	 */
 	NWTModel.prototype.each = function(callback) {
-
 		this._update();
 
 		var returnData = [];
-		for( var i = 0, record; record = this._data ; i++) {
+		for( var i = 0, record; record = this._data[i] ; i++) {
 			returnData.push(callback(record));
 		}
+
 		return returnData.join('');
 	};
 

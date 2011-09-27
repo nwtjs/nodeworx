@@ -1,8 +1,8 @@
 {
 	pageTitle : ' Chat',
 
-        content : ChatModel.all({order:{id:'desc'}, limit:10}).each(function(chat) {
-			return '<div class="chat">' + chat.content + '</div>'
+        content : ChatModel.recent().each(function(chat) {
+			return '<div class="chat">' + chat.username + ':' + chat.content + '</div>'
 		}) +
         Form.field('Chat.input') + Form.submit('Send')
 }
