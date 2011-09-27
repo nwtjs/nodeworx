@@ -63,7 +63,14 @@
 		function NWTLoader() {}
 
 		NWTLoader.prototype.load = function(baseDir, className, instantiate) {
-			var classToLoad = require('./../' + baseDir + '/' + className + '.js')[className];
+			try {
+console.log('folder', global.context().config.folder);
+console.log('./../../' + global.context().config.folder + '/' + baseDir + '/' + className + '.js');
+				var classToLoad = require('./../../' + global.context().config.folder + '/' + baseDir + '/' + className + '.js')[className];
+			} catch(e) {
+console.log(e);
+				var classToLoad = require('./../' + baseDir + '/' + className + '.js')[className];
+			}
 
 			if( typeof instantiate === 'undefined' ) {
 				return new classToLoad();

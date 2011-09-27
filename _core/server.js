@@ -52,7 +52,8 @@ function getServer(definition) {
 				var viewContent = fs.readFileSync(__dirname  + '/../' + definition.folder + '/views/' + controller + '/' + action + '.js')
 					contextObject = {
 						// Default the client scripts
-						clientScripts : ['external/sizzle', 'common/NWTBase', 'common/NWTEventWrapper', 'common/NWTNode', 'common/NWTSocket', 'common/NWTDispatcher']
+						clientScripts : ['external/sizzle', 'common/NWTBase', 'common/NWTEventWrapper', 'common/NWTNode', 'common/NWTSocket', 'common/NWTDispatcher'],
+						config : definition
 					};
 
 				global.context = function() {
