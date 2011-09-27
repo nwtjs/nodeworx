@@ -22,11 +22,13 @@ NWTmysql.prototype.find = function(params) {
 
 	buildQuery = buildQuery.join('');
 
-	//console.log('Querying with: ', buildQuery);
+	console.log('Querying with: ', buildQuery);
 
 	var result = this.client.querySync(buildQuery + ";");
 
 	var returnData = result.fetchAllSync();
+
+	console.log('Got data ', returnData);
 
 	return returnData;
 };
