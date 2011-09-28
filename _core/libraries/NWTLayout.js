@@ -41,7 +41,7 @@
 		
 			var method = 'helper',
 				lib = match[1];
-			console.log('Autoloading lib ', lib);
+
         		if( lib.indexOf('Model') !== -1 ) {
 		                 method = 'model';
 	                }
@@ -93,6 +93,7 @@
 
 		// Run the prefilter
 		if( this.definition.preFilter !== undefined ) {
+			console.log('passing in params: ', this.params);
 			this.definition.preFilter(this.params);
 		}
 

@@ -57,6 +57,56 @@ NWTNodeInstance.prototype.on = function(event, callback) {
 };
 
 
+/**
+ * Serializes sub children of the current node into post data
+ */
+NWTNodeInstance.prototype.serialize = function() {
+
+    var retVal = '',
+
+    // Getting ALL elements inside of form element
+    els = this._node.getElementsByTagName('*');
+
+    // Looping through all elements inside of form and checking to see if they're "form elements"
+    for( var i = 0, el; el = els[i]; i++ ) {
+      if( !el.disabled && el.name && el.name.length > 0 ) {
+        switch(el.tagName.toLowerCase()) {
+          case 'input':
+            switch( el.type ) {
+              // Note we SKIP Buttons and Submits since there are no reasons as to why we 
+              // should submit those anyway
+              case 'checkbox':
+              case 'radio':
+                if( el.checked ) {
+                  if( retVal.length > 0 ) {
+                    retVal  = '&';
+                  }
+                  retVal  = el.name + '=' + encodeURIComponent(el.value);
+                }
+                break;
+              case 'hidden':
+              case 'password':
+              case 'text':
+                if( retVal.length > 0 ) {
+                  retVal  = '&';
+                }
+                retVal  = el.name + '=' + encodeURIComponent(el.value);
+                break;
+            }
+            break;
+          case 'select':
+          case 'textarea':
+            if( retVal.length > 0 ) {
+              retVal  = '&';
+            }
+            retVal  = el.name  + '=' + encodeURIComponent(el.value);
+            break;
+        }
+      }
+    }
+    return retVal;
+};
+
 
 /**
  * Sets the content of the node

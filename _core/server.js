@@ -30,11 +30,9 @@ function getServer(definition) {
 
 			// The file exists, stream it
 			path.exists(filename, function(exists) {
-				console.log('serving', exists);
 				if( exists ) {
 
 					var mimeType = mimeTypes[path.extname(filename).split(".")[1]];
-					console.log(mimeType);
 					response.writeHead(200, {'Content-Type':mimeType});
 
 					var fileStream = fs.createReadStream(filename);
@@ -85,7 +83,8 @@ function getServer(definition) {
 				 * Callback after all params have been parsed (including POST params)
 				 */
 				var paramsParsed = function() {
-					NWTLayout._loadView(viewContent, params);
+
+					//console.log('processed params are: ', params);
 
 					// Get the request params
 					for( var i = 2 , param ; param = reqParts[i] ; i+=2 ) {
@@ -97,13 +96,15 @@ function getServer(definition) {
 						params.layout = 'empty';
 					}
 
+					NWTLayout._loadView(viewContent, params);
+
 					content = NWTLayout + ''
 
-                	        	// Reset the context holder
-                		        contextObject = {};
-	
-        		                // Append empty string to always trigger the toString method
-	        	                response.end(content + '');
+					// Reset the context holder
+					contextObject = {};
+
+					// Append empty string to always trigger the toString method
+					response.end(content + '');
 				};
 
 
@@ -145,7 +146,6 @@ function getServer(definition) {
 							var POST = qs.parse(body);
 							if( POST ) {
 								params = processPostParams(POST);
-								//console.log('processed params are: ', params);
 							}
 							paramsParsed();
 							});

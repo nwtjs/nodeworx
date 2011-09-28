@@ -14,6 +14,10 @@ function NWTSocketInstance(params) {
 	this.config.postData = this.config.postData || '';
 	this.config.failure = this.config.failure || function(){alert('fail');};
 
+	if( this.config.form !== undefined ) {
+		this.config.postData = this.config.form.serialize();
+	}
+
 	var request = new XMLHttpRequest();
 
 	request.open("POST", this.resource, true);
@@ -46,6 +50,7 @@ function NWTSocketInstance(params) {
 		mythis.config.success(response);
 	}
 	if (request.readyState == 4) { return; }
+	request.setRequestHeader("Content-type","application/x-www-form-urlencoded");
 	request.send(this.config.postData);
 }
 
