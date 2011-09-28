@@ -34,7 +34,7 @@
 		// Match a . (dot) and a class name
 		// Match to a paren to ensure a function call
 		// This regex *may* still match content, but should be good enough for now
-		var regex =  new RegExp(/([a-zA-Z]+)\.[\sa-zA-Z]+\(/gi),
+		var regex =  new RegExp(/([a-zA-Z]+)\.[\sa-zA-Z0-9]+\(/gi),
 			match;
 
 		while( (match = regex.exec(viewContent)) !== null ) {

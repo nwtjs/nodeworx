@@ -49,6 +49,40 @@
 
 
 	/**
+	 * Html list helper
+	 * Generates an unordered list
+	 * Each argument is a list item
+	 */
+	function HtmlList(args) {
+		this.content = [];
+
+		for( var i = 0, argLen = args.length ; i < argLen ; i++ ) {
+			this.content.push(args[i]);
+		}
+
+		HtmlList._super.call(this, args);
+	}
+	global.nwt.extend(HtmlList, nwtHelperInstance);
+
+
+	/**
+	 * Renders the HtmlLink object
+	 */
+	HtmlList.prototype.render = function() {
+		var items = this.get('content'),
+			content = [];
+
+		for( var i = 0, item ; item = items[i] ; i++ ) {
+			content.push('<li>');
+				content.push(item);
+			content.push('</li>');
+		}
+
+		return '<ul>' + content.join('') + '</ul>';
+	};
+
+
+	/**
 	 * Html image helper
 	 */
 	function HtmlImage(args) {
@@ -87,6 +121,15 @@
 	 */
 	HtmlHelper.prototype.link = function() {
 		return new HtmlLink(arguments);
+	};
+
+
+	/**
+	 * Returns a list helper object
+	 * @see HtmlList
+	 */
+	HtmlHelper.prototype.list = function() {
+		return new HtmlList(arguments);
 	};
 
 
