@@ -109,11 +109,26 @@ NWTNodeInstance.prototype.serialize = function() {
 
 
 /**
+ * Gets the content of the node
+ */
+NWTNodeInstance.prototype.getContent = function(content) {
+	return this._node.innerHTML;
+};
+
+
+/**
  * Sets the content of the node
  * @param string Content to set
  */
 NWTNodeInstance.prototype.setContent = function(content) {
 	this._node.innerHTML = content;
+
+	// Pull out any custom event hooks, and listen for them
+	this.all('script.event_hooks').each(function(eventBlock) {
+		var event = eval(eventBlock.getContent());
+		nwt.event.implement(event);
+		eventBlock.remove();
+	});
 };
 
 
@@ -138,6 +153,18 @@ NWTNodeInstance.prototype.all = function(selector) {
 	return new NWTNodeList(nodelist);
 };
 
+
+/**
+ * Removes a node instance from the dom
+ */
+NWTNodeInstance.prototype.remove = function() {
+	this._node.parentNode.removeChild(this._node);
+};
+
+
+/**
+ * Simulates a click event on a node
+ */
 NWTNodeInstance.prototype.click = function() {
 
 	var evt = document.createEvent("HTMLEvents");
