@@ -51,6 +51,8 @@
 	 */
 	NWTHelperInstance.prototype.on = function(event, callback) {
 
+		console.log('Creating new event listener ', arguments);
+
 		if( !this._events ) {
 			this._events = [];
 		}

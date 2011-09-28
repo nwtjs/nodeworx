@@ -2,7 +2,7 @@
 	pageTitle : ' Chat',
 
 	content : 
-	DataBinder.wrap(
+	TemplateDataBinder.wrap(
 		ChatModel.recent().each(function(chat) {
 			return '<div class="chat">' + chat.username + ':' + chat.content + '</div>'
 		})
@@ -13,7 +13,7 @@
 	)
 	.utilize(ChatModel)
 	.on('success', function(result) {
-		nwt.one('#ChatContent').setContent('');
-		nwt.dataBinder('ChatModel').update();
+		nwt.one('#ChatContent').set('value', '');
+		nwt.templateDataBinder.update('ChatModel');
 	})
 }
