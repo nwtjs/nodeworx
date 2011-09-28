@@ -29,11 +29,11 @@ NWTEventManager.prototype.implement = function(eventSpecs) {
  * Fires off an event
  * Calls all event listeners on the event
  */
-NWTEventManager.prototype.fire = function(event) {
+NWTEventManager.prototype.fire = function(event, args) {
 	if( this.events[event] === undefined ) { return; }
 
 	for( var i = 0 , callback ; callback = this.events[event][i] ; i++ ) {
-		callback();
+		callback(args);
 	}
 };
 

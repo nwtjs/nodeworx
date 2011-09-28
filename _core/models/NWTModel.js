@@ -1,5 +1,23 @@
 (function(root) {
 
+	var nwtHelperInstance = global.nwt.load().library('NWTHelperInstance', false);
+
+	/**
+	 * The NWTModelRender class is a wrapper for markup created from a model
+	 * Currently NWTModel::each calls this
+	 */
+	function NWTModelRender(content, model) {
+		this.content = content;
+		this.model = model;
+		this.getClass = this.model.getClass;
+	}
+	global.nwt.extend(NWTModelRender, nwtHelperInstance);
+
+	NWTModelRender.prototype.render = function() {
+		return this.content;
+	};
+
+
 	function NWTModel() {
 
 		// Holds the DB Connection
@@ -96,7 +114,7 @@
 			returnData.push(callback(record));
 		}
 
-		return returnData.join('');
+		return new NWTModelRender(returnData.join(''), this);
 	};
 
 	root.NWTModel = NWTModel;

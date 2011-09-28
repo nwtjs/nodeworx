@@ -46,6 +46,17 @@ NWTNodeInstance.prototype.get = function(property) {
 
 
 /**
+ * Sets an attribute on the node
+ * @param string Attribute to set
+ * @param string Value to set
+ */
+NWTNodeInstance.prototype.set = function(property, value) {
+	this._node[property] = value;
+	return this;
+};
+
+
+/**
  * Adds an event listener tot he node
  * @param string Event to listen for
  * @param function Event callback function
@@ -196,6 +207,15 @@ NWTNodeList.prototype.each = function(callback) {
 		callback(node);
 	}
 };
+
+
+/**
+ * Returns a node specified by an offset
+ * @param integer Offset of the item
+ */
+NWTNodeList.prototype.item = function(offset) {
+	return this.nodes[offset];
+}
 
 
 /**
