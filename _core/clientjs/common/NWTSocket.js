@@ -26,7 +26,7 @@ function NWTSocketInstance(params) {
 	request.onreadystatechange = function () {
 		if (request.readyState != 4) return;
 		if (request.status != 200 && request.status != 304) {
-			config.callback.failure();
+			mythis.config.callback.failure();
 			return;
 		}
 
