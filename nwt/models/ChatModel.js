@@ -11,7 +11,7 @@
 			content : 'string',
 			created : 'datetime'
 		};
-
+		ChatModel._super.call(this);
 	}
 	global.nwt.extend(ChatModel, NWTModel);
 

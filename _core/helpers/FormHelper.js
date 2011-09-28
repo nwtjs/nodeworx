@@ -13,6 +13,7 @@
 		this.value = this.attributes.value || '';
 		this.label = this.attributes.label || this.key;
 		this.attributes.id = this.attributes.id || this._generateId(this.key);
+		this.attributes.name = this.attributes.name || this._generateName(this.key);
 
 		FormField._super.call(this, attributes);
 	}
@@ -28,6 +29,21 @@
 	        	return firstChar.toUpperCase();
 		});
 		return id;
+	};
+
+
+	/**
+	 * Generates a field name from a form key
+	 * E.g., User.username turns into: User[username]
+	 */
+	FormField.prototype._generateName = function(key) {
+		var keyParts = key.split('.'),
+			nameBuild = keyParts[0];
+
+		for( var i = 1 , part ; part = keyParts[i] ; i++ ) {
+			nameBuild = nameBuild + "[" + part + "]";
+		}
+		return nameBuild;
 	};
 
 
@@ -103,14 +119,44 @@
 	 * @constructor
 	 */
 	function FormHelper() {
-		
+		// Keeps all of the fields that we have generated
+		this._fields = [];
+
+		// Forms may utilize a model for submission or updating
+		this._model = null;
 	}
+
+
+	/**
+	 * Renders the form object
+	 */
+	FormHelper.prototype.toString = function() {
+
+		global.context().clientScripts.push('widgets/Form');
+
+		var content = [
+			this._open('/_nwt/model_updater/model/' + global.nwt.getClass(this._model)),
+			this._fields.join(''),
+			this._close()
+		];
+		return content.join('');
+	};
+
+
+	/**
+	 * Loads a model into the object to update
+	 * @param object Model which extends NWTModel
+	 */
+	FormHelper.prototype.utilize = function(model) {
+		this._model = model;
+		return this;
+	};
 
 
 	/**
 	 * Creates the openeing <form> tag
 	 */
-	FormHelper.prototype.open = function(action) {
+	FormHelper.prototype._open = function(action) {
 		action = action || '/';
 		return '<form method="POST" action="' + action + '">';
 	};
@@ -119,7 +165,7 @@
 	/**
 	 * Closes the form
 	 */
-	FormHelper.prototype.close = function() {
+	FormHelper.prototype._close = function() {
 		return '</form>';
 	};
 
@@ -133,7 +179,20 @@
 	 * @param string Key for the field e.g., Model.column_name
 	 */
 	FormHelper.prototype.field = function() {
-		return new FormField(arguments);
+		this._fields.push( new FormField(arguments) );
+	};
+
+
+	/**
+	 * Generates a form with multiple inputs
+	 * @params objects... Several form field objects
+	 */
+	FormHelper.prototype.generate = function() {
+		for (var i = 0, len = arguments.length; i < len; i++){
+			var field = arguments[i];
+			this._fields.push(field);
+		}
+		return this;
 	};
 
 	root.FormHelper = FormHelper;

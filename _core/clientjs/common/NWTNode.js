@@ -138,6 +138,11 @@ function NWTNode() {
 NWTNode.prototype.one = function(selector) {
 	if( typeof selector == 'string' ) {
 		var node = Sizzle(selector);
+		
+		if( node.length == 0 ) {
+			return null;
+		}
+
 		return new NWTNodeInstance(node[0]);
 	} else {
 		return new NWTNodeInstance(selector);

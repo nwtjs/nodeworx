@@ -67,6 +67,14 @@
 
 
 	/**
+	 * Saves the model record to the database
+	 */
+	NWTModel.prototype.save = function(data) {
+		console.log('saving data', data);
+	};
+
+
+	/**
 	 * Iterates through each record and calls the callback
 	 * If we have not fetched the data, do so
 	 */

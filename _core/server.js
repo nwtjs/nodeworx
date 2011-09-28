@@ -49,50 +49,113 @@ function getServer(definition) {
 	
 			// Require the controller for the application we've requested
 			try {
-				var viewContent = fs.readFileSync(__dirname  + '/../' + definition.folder + '/views/' + controller + '/' + action + '.js')
-					contextObject = {
-						// Default the client scripts
-						clientScripts : ['external/sizzle', 'common/NWTBase', 'common/NWTEventWrapper', 'common/NWTNode', 'common/NWTSocket', 'common/NWTDispatcher'],
-						config : definition
-					};
+				var contextObject = {
+					// Default the client scripts
+					clientScripts : ['external/sizzle', 'common/NWTBase', 'common/NWTEventWrapper', 'common/NWTNode', 'common/NWTSocket', 'common/NWTDispatcher'],
+					config : definition
+				};
 
 				global.context = function() {
 					return contextObject;
 				};
-	
+
+				// Handle special _nwt requests
+				// This calls an internal entrypoint to handle a private request
+				// E.g., _nwt/model_updater/model/ChatModel
+				var rootFolder = __dirname  + '/../' + definition.folder + '/views/',
+					layoutOverride = false;
+				if( pathname.indexOf('_nwt') !== -1  ) {
+					rootFolder = __dirname + '/';
+					controller = 'private';
+					layoutOverride = 'empty';
+				}
+
 				// Now load in the layout file
 				// Read the file and perform an eval on it, this is how we will typically access templates to keep them clean
-				var NWTLayout = global.nwt.load().library('NWTLayout'),
+				var viewContent = fs.readFileSync(rootFolder + controller + '/' + action + '.js'),
+					NWTLayout = global.nwt.load().library('NWTLayout'),
 
 					// Holds request params that came in from a /key/value format
 					params = {};
 
 				params.layout = 'default'
 
-				// Get the request params
-				for( var i = 2 , param ; param = reqParts[i] ; i+=2 ) {
-					params[param] = reqParts[(i+1)];
-				}
 
-				// Set the ajax layout file
-				if( params.ajax ) {
-					params.layout = 'empty';
-				}
+				/**
+				 * Callback after all params have been parsed (including POST params)
+				 */
+				var paramsParsed = function() {
+					NWTLayout._loadView(viewContent, params);
 
-				NWTLayout._loadView(viewContent, params);
+					// Get the request params
+					for( var i = 2 , param ; param = reqParts[i] ; i+=2 ) {
+						params[param] = reqParts[(i+1)];
+					}
+
+					// Set the ajax layout file
+					if( params.ajax || layoutOverride == 'empty' ) {
+						params.layout = 'empty';
+					}
+
+					content = NWTLayout + ''
+
+                	        	// Reset the context holder
+                		        contextObject = {};
 	
-				content = NWTLayout + '';
-	
+        		                // Append empty string to always trigger the toString method
+	        	                response.end(content + '');
+				};
+
+
+				// Handle postdata, inject them into the params
+				if (request.method == 'POST') {
+
+					/**
+					 * Processes the post params to turn Key[key2]=values into an object: {key:{key2:value}}
+					 */
+					function processPostParams(data) {
+						var newData = {},
+							i;
+
+						for( i in data ) {
+							if( i.indexOf('[')!== -1 ) {
+								// Special case, make recursive call
+								var matchKeys = /([a-zA-Z0-9]*)(?:\[([a-zA-Z0-9\[\[]*)\])?/gi.exec(i),
+									child = {};
+
+								child[matchKeys[2]] = data[i];
+
+								newData[matchKeys[1]] = processPostParams(child);
+							} else {
+								newData[i] = data[i];
+							}
+						}
+
+						return newData;
+					}
+				
+					var qs = require('querystring'),
+						body = '';
+
+					request.on('data', function (data) {
+							body += data;
+							});
+
+					request.on('end', function () {
+							var POST = qs.parse(body);
+							if( POST ) {
+								params = processPostParams(POST);
+								//console.log('processed params are: ', params);
+							}
+							paramsParsed();
+							});
+				} else {
+					paramsParsed();
+				}
 			} catch(e) {
-				content = 'Could not load entrypoint at: ' + definition.folder + '/controllers/' + controller + '/' + action;
-				console.log(content + '', e, e.stack);
+				response.end('Could not load entrypoint at: ' + definition.folder + '/views/' + controller + '/' + action);
+				//console.log(content + '', e, e.stack);
 			}
-
-			// Reset the context holder
-			contextObject = {};
-	
-			// Append empty string to always trigger the toString method
-			response.end(content + '');
 		}
 	});
 	

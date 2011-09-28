@@ -64,13 +64,16 @@
 
 		NWTLoader.prototype.load = function(baseDir, className, instantiate) {
 			try {
-console.log('folder', global.context().config.folder);
-console.log('./../../' + global.context().config.folder + '/' + baseDir + '/' + className + '.js');
+				//console.log('folder', global.context().config.folder);
+				//console.log('./../../' + global.context().config.folder + '/' + baseDir + '/' + className + '.js');
 				var classToLoad = require('./../../' + global.context().config.folder + '/' + baseDir + '/' + className + '.js')[className];
 			} catch(e) {
-console.log(e);
 				var classToLoad = require('./../' + baseDir + '/' + className + '.js')[className];
 			}
+
+			classToLoad.prototype.getClass = function() {
+				return className;
+			};
 
 			if( typeof instantiate === 'undefined' ) {
 				return new classToLoad();
@@ -85,6 +88,15 @@ console.log(e);
 
 		return new NWTLoader();
 	};
+
+
+        /**
+         * Returns the name of an object
+         * @param object Object to return
+         */
+        NWTUtils.prototype.getClass = function(obj) {
+                return obj.getClass();
+        };
 
 
 	/**
