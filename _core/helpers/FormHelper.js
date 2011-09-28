@@ -28,7 +28,7 @@
 		var id = key.replace(/^([a-z])|\.+([a-z])/g, function (firstChar) {
 	        	return firstChar.toUpperCase();
 		});
-		return id;
+		return id.replace('.', '');
 	};
 
 
@@ -124,13 +124,16 @@
 
 		// Forms may utilize a model for submission or updating
 		this._model = null;
+
+		FormHelper._super.call(this);
 	}
+	global.nwt.extend(FormHelper, nwtHelperInstance);
 
 
 	/**
 	 * Renders the form object
 	 */
-	FormHelper.prototype.toString = function() {
+	FormHelper.prototype.render = function() {
 
 		global.context().clientScripts.push('widgets/Form');
 

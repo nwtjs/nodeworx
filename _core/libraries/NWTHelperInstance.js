@@ -13,7 +13,14 @@
 	 * Calles render on the subclass
 	 */
 	NWTHelperInstance.prototype.toString = function() {
-		return this.render();
+
+		var meta = '';
+
+		if( this._events !== undefined ) {
+			meta = '<script type="text/javascript" class="event_hooks">' + JSON.stringify(this._events) + '</script>';
+		}
+
+		return meta + this.render();
 	}
 
 
@@ -36,6 +43,21 @@
 		}
 
 		return attributes.join(' ');
+	};
+
+
+	/**
+	 * Implements a permissions broker interface to listen and respond to events
+	 */
+	NWTHelperInstance.prototype.on = function(event, callback) {
+
+		if( !this._events ) {
+			this._events = [];
+		}
+
+		this._events.push({event: global.nwt.getClass(this) + ':' + event, callback: callback.toString()});
+
+		return this;
 	};
 
 

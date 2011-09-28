@@ -13,6 +13,8 @@ NWTForm.prototype.submit = function(el) {
 	nwt.socket.send(resource,{
 		success: function(response) {
 			console.log('Got response', response);
+
+			nwt.event.fire('FormHelper:success');
 		},
 		form: el
 	});

@@ -49,7 +49,7 @@ function getServer(definition) {
 			try {
 				var contextObject = {
 					// Default the client scripts
-					clientScripts : ['external/sizzle', 'common/NWTBase', 'common/NWTEventWrapper', 'common/NWTNode', 'common/NWTSocket', 'common/NWTDispatcher'],
+					clientScripts : ['external/sizzle', 'common/NWTBase', 'common/NWTEventManager', 'common/NWTEventWrapper', 'common/NWTNode', 'common/NWTSocket', 'common/NWTDispatcher'],
 					config : definition
 				};
 
