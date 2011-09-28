@@ -5,7 +5,7 @@
 			return '<div class="chat">' + chat.username + ':' + chat.content + '</div>'
 		}) +
 	Form.generate(
-		Form.field('Chat.input'),
+		Form.field('Chat.content'),
 		Form.submit('Send')
 	).utilize(ChatModel)
 }

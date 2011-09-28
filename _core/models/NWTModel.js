@@ -51,9 +51,10 @@
 
 
 	/**
-	 * Updates the current dataset based on the params
-	 */
-	NWTModel.prototype._update = function() {
+	 * Loads the DB client
+	 * @return object
+	 */	
+	NWTModel.prototype._getClient = function() {
 
 		// If we do not have a client yet, instantiate one
 		if( !this._client ) {
@@ -62,7 +63,15 @@
 			this._client = new driverClass(_clientConfig,  this);
 		}
 
-		this._data = this._client.find(this.params);
+		return this._client;
+	};
+
+
+	/**
+	 * Updates the current dataset based on the params
+	 */
+	NWTModel.prototype._update = function() {
+		this._data = this._getClient().find(this.params);
 	};
 
 
@@ -70,7 +79,8 @@
 	 * Saves the model record to the database
 	 */
 	NWTModel.prototype.save = function(data) {
-		console.log('saving data', data);
+		this.dirty = true;
+		this._getClient().save(data);
 	};
 
 

@@ -12,6 +12,49 @@ function NWTmysql(config, model) {
 	return this;
 }
 
+NWTmysql.prototype.save = function(data) {
+
+	var buildQuery =[],
+		keys = [],
+		values = [];
+
+	if( data.id === undefined ) {
+		
+		for( var i in data ) {
+			keys.push(i);
+			values.push("'" + data[i].replace("'", "\'") + "'");
+		}
+		
+		buildQuery.push('INSERT INTO ');
+		buildQuery.push(this.model.tableName);
+		buildQuery.push(' (' + keys.join(', ') + ') VALUES (');
+			buildQuery.push(values.join(', '));
+		buildQuery.push(')');
+	} else {
+		buildQuery.push('UPDATE ');
+		buildQuery.push(this.model.tableName);
+		buildQuery.push(' SET ');
+
+		var updateStatements = [];
+		for( var i in data ) {
+			updateStatements.push(i + " = '" + data[i].replace("'", "\'") + "'");
+		}
+		buildQuery.push(updateStatements.join(','));
+
+		buildQuery.push(' WHERE id = ' + data.id);
+	}
+
+	try {
+		var result = this.client.querySync(buildQuery.join('') + ";")
+	} catch(e) {
+		console.log('Query failed ', buildQuery.join(''));
+	}
+
+	if( result ) {
+		this.model.lastInsertId = this.client.lastInsertIdSync();
+	}
+};
+
 NWTmysql.prototype.find = function(params) {
 
 	var buildQuery =[];
