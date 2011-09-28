@@ -46,7 +46,9 @@
 		                 method = 'model';
 	                }
 
-                	eval('var ' + lib + ' = global.nwt.load().' + method + '(\'' + lib + '\');');
+			try {
+                		eval('var ' + lib + ' = global.nwt.load().' + method + '(\'' + lib + '\');');
+			} catch(e){}
 		}
 
 		console.log('View content is: ', viewContent);
@@ -63,7 +65,7 @@
 		var content = [];
 
 		for( var i = 0, script ; script = global.context().clientScripts[i] ; i++ ) {
-			content.push('<script type="text/javascript" src="/_core/clientjs/' + script + '.js"></script>');			
+			content.push('<script id="' + script.replace('/', '-') + '" type="text/javascript" src="/_core/clientjs/' + script + '.js"></script>');			
 		}
 
 		return content.join('');
@@ -71,9 +73,28 @@
 
 
 	/**
+	 * Generates an object of required scripts
+	 */
+	NWTLayout.prototype._generateScripts = function() {
+                var scripts = {};
+
+                for( var i = 0, script ; script = global.context().clientScripts[i] ; i++ ) {
+                       scripts[script.replace('/', '-')] = '/_core/clientjs/' + script + '.js';
+                }
+
+                return scripts;
+
+	};
+
+	/**
 	 * Renders the entire content of the layout
 	 */
 	NWTLayout.prototype.toString = function() {
+
+		// Run the prefilter
+		if( this.definition.preFilter !== undefined ) {
+			this.definition.preFilter(this.params);
+		}
 
 		var layoutClass = require('./../views/layouts/' + this.params.layout + '.js'),
 			content = layoutClass.NWTViewLayoutWrapper(this);

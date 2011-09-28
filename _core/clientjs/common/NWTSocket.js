@@ -27,6 +27,22 @@ function NWTSocketInstance(params) {
 		}
 
 		var response = JSON.parse(request.responseText);
+
+		// Handle special response keys
+		// Scripts are included if they don't exist in the dom
+		if( response.scripts !== undefined ) {
+			for( var i in response.scripts  ) {
+				if( !nwt.one('script#' +i)  ) {
+				   var head= document.getElementsByTagName('head')[0];
+				   var script= document.createElement('script');
+				   script.type= 'text/javascript';
+				   script.src= response.scripts[i];
+				   script.id = i;
+				   head.appendChild(script);
+				}
+			}
+		}
+
 		mythis.config.success(response);
 	}
 	if (request.readyState == 4) { return; }
