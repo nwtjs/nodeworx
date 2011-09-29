@@ -4,7 +4,7 @@ function NWTDefaultLayout(NWTLayout) {
 			'<title>', NWTLayout.definition.title, '</title>',
 		'</head>',
 		'<body>',
-			NWTLayout.definition.content,
+			NWTLayout.definition.content + '',
 			NWTLayout._beforeBody(),
 		'</body>'];
 

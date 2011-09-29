@@ -105,6 +105,9 @@
 	 * @param string Script bundle name
 	 */
 	NWTUtils.prototype.requireScript = function(script) {
+
+		console.log('Requiring script: ', script);
+
 		var context = global.context();
 		if( !context.clientScripts) {
 			context.clientScripts = [];
