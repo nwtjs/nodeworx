@@ -59,6 +59,18 @@
 		eval('this.definition = ' + viewContent + ';');
 	};
 
+	NWTLayout.prototype._stylesheets = function() {
+
+		if( !this.definition.css  ) {
+			return;
+		}
+
+		var stylesheetContent = [];
+		for( var i = 0, path ; path = this.definition.css[i] ; i++ ) {
+			stylesheetContent.push('<link rel="stylesheet"i type="text/css" href="/' + path + '">');
+		}
+		return stylesheetContent.join('');
+	};
 
 	/**
 	 * Renders framework things before the body tag including javascriptz
