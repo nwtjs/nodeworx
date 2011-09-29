@@ -154,7 +154,7 @@ function getServer(definition) {
 				}
 			} catch(e) {
 				response.end('Could not load entrypoint at: ' + definition.folder + '/views/' + controller + '/' + action);
-				//console.log(content + '', e, e.stack);
+				console.log(content + '', e, e.stack);
 			}
 		}
 	});

@@ -46,11 +46,14 @@
 		                 method = 'model';
 	                }
 
+			//console.log('Attempting to autoload lib: ', lib);
+
 			try {
                 		eval('var ' + lib + ' = global.nwt.load().' + method + '(\'' + lib + '\');');
-			} catch(e){}
+			} catch(e){
+				//console.log('Could not load lib', e);
+			}
 		}
-
 		console.log('View content is: ', viewContent);
 
 		eval('this.definition = ' + viewContent + ';');

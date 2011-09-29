@@ -3,7 +3,6 @@
  */
 function NWTEventWrapper(event) {
 	this._event = event;
-
 	this.target = nwt.one(event.target);
 }
 

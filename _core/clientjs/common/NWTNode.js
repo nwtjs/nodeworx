@@ -37,6 +37,18 @@ NWTNodeInstance.prototype.ancestor = function(selector) {
 
 
 /**
+ * Gets a data attribute from the node
+ * Pass just whatever comes after data-
+ * If the attribute were data-user-id,
+ * you should pass 'user-id' to this function
+ * @param string Data attribute to get
+ */
+NWTNodeInstance.prototype.data = function(property) {
+	return this._node.getAttribute('data-' + property);
+};
+
+
+/**
  * Gets an attribute from the node
  * @param string Attribute to get
  */
