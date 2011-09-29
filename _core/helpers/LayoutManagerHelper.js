@@ -46,7 +46,11 @@
          * Adds a panel to the layout manager 
          */
         LayoutManagerHelper.prototype._add = function(position, args) {
-		args = args[0];
+		if( !args[0] ) {
+			args = '';
+		} else {
+			args = args[0];
+		}
 
 		// If the content is a string, or has a render method, set an object.
 		if( typeof args === "string" || args.render !== undefined ) {
