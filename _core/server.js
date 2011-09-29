@@ -38,6 +38,8 @@ function getServer(definition) {
 					var fileStream = fs.createReadStream(filename);
 					fileStream.pipe(response);
 				} else {
+					response.writeHead(404, {"Content-Type": "text/html"});
+					console.log('File does not exist: ' , filename);
 					response.end();
 				}
 			});
