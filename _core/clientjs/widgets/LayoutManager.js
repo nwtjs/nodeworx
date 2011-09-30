@@ -7,11 +7,15 @@ function NWTLayoutManager() {
  */
 NWTLayoutManager.prototype.trapEvent = function(el) {
 
-	var resource = el.get('href');
+	var resource = el.get('href'),
+		layoutWrapper = el.ancestor('.nwt_layout');
+
+
+	layoutWrapper.addClass('layout_' + resource.replace('/', '_'));
 
 	nwt.socket.send(resource,{
 		success: function(response) {
-			el.ancestor('.nwt_layout').one('.main .inner').setContent(response.content);
+			layoutWrapper.one('.main .inner').setContent(response.content);
 		}
 	});
 };
