@@ -6,7 +6,6 @@ function NWTLayoutManager() {
  * a div with a class of "nwt_event_sink"
  */
 NWTLayoutManager.prototype.trapEvent = function(el) {
-
 	var resource = el.get('href'),
 		layoutWrapper = el.ancestor('.nwt_layout'),
 		layoutIdentifierParts = resource.split('/');
@@ -19,7 +18,7 @@ NWTLayoutManager.prototype.trapEvent = function(el) {
 
 	nwt.socket.send(resource,{
 		success: function(response) {
-			layoutWrapper.one('.main .inner').setContent(response.content);
+			layoutWrapper.one('.nwt_main .inner').setContent(response.content);
 		}
 	});
 };

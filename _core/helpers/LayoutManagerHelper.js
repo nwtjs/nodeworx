@@ -12,6 +12,7 @@
 	 * content inside of the LayoutManager "main" area.
 	 */
 	function LayoutManagerHelper() {
+		this.config = {};
 		this.panels = {};
 	};
 	global.nwt.extend(LayoutManagerHelper, nwtHelperInstance);
@@ -24,7 +25,8 @@
 		
 		global.nwt.requireScript('widgets/LayoutManager');
 
-		var content = [];
+		var content = [],
+			classPrefix = ( this.config.classPrefix ? this.config.classPrefix + '_' : '' );
 
 		// The nwt_layout class is only for semantics and traversal
 		// The nwt_event_sink class handles bubbling if a data-callback attribute is present
@@ -33,7 +35,8 @@
 		content.push('<div class="nwt_layout_inner' + ( this.initialState ? ' layout_' + this.initialState.join('_') : '' )  + '">');
 
 		for( var i in this.panels ) {
-			content.push('<div class="' + i + '"><div class="inner">');
+			// Display several classes, the nwt_main, nwt_left, nwt_right classes are reserved for JS functionality
+			content.push('<div class="' + classPrefix + '' + i + ' nwt_' + i + '"><div class="inner">');
 				content.push(this.panels[i].content);
 			content.push('</div></div>');
 		}
@@ -44,6 +47,7 @@
 
 		// Reset vars
 		this.panels = {};
+		this.config = {};
 		this.initialState = null;
 
 	        return content.join('');
@@ -67,6 +71,18 @@
 		var definition = args;
 
         	this.panels[position] = definition;
+	};
+
+
+	/**
+	 * Adds a class prefix to this instance of the layout manager
+	 * This is useful when mutliple instances of layouts are nested
+	 * The prefix is only added to the wrappers of the inner panes
+	 * @param string The class prefix to add
+	 */
+	LayoutManagerHelper.prototype.addClassPrefix = function(classPrefix) {
+		this.config.classPrefix = classPrefix;
+		return this;
 	};
 
 
