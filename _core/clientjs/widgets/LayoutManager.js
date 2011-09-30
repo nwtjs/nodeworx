@@ -8,10 +8,14 @@ function NWTLayoutManager() {
 NWTLayoutManager.prototype.trapEvent = function(el) {
 
 	var resource = el.get('href'),
-		layoutWrapper = el.ancestor('.nwt_layout');
+		layoutWrapper = el.ancestor('.nwt_layout'),
+		layoutIdentifierParts = resource.split('/');
 
+	// Quick and dirty way to attempt to generate a semantic resource identifier for styling
+	// Take the last two segments from the resource, and implode them with an underscore
+	var layoutIdentifier = [layoutIdentifierParts.pop(), layoutIdentifierParts.pop()].reverse().join('_');
 
-	layoutWrapper.addClass('layout_' + resource.replace('/', '_'));
+	layoutWrapper.one('.nwt_layout_inner').set('className', 'nwt_layout_inner').addClass('layout_' + layoutIdentifier);
 
 	nwt.socket.send(resource,{
 		success: function(response) {
