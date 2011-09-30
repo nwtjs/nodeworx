@@ -37,6 +37,32 @@ NWTNodeInstance.prototype.ancestor = function(selector) {
 
 
 /**
+ * Returns true if the class exists on the node, false if not
+ */
+NWTNodeInstance.prototype.hasClass = function(className) {
+	return (this._node.className.indexOf(className) !== -1);
+};
+
+
+/**
+ * Adds a class to the node
+ */
+NWTNodeInstance.prototype.addClass = function(className) {
+	if( !this.hasClass(className)  ) {
+		this._node.className += ' ' + className;
+	}
+};
+
+
+/**
+ * Removes a class from the node.
+ */
+NWTNodeInstance.prototype.removeClass = function(className) {
+	this._node.className.replace(className, '');
+};
+
+
+/**
  * Gets a data attribute from the node
  * Pass just whatever comes after data-
  * If the attribute were data-user-id,
