@@ -12,13 +12,20 @@ function NWTDispatcher() {
 NWTDispatcher.prototype.dispatch = function(e) {
 
 	var target = e.target,
-		handlerFound = false;
+		handlerFound = false,
+
+		// What element the user wanted
+		// Tends to be either an input, or anchor
+		intendedTarget = false;
 
 	while( target.get('parentNode') ) {
 
-		if ( target.get('nodeName').toUpperCase() !== "A" && target.get('nodeName').toUpperCase() !== "INPUT" ) { return; }
+		if( target.get('nodeName').toUpperCase() === "A" || target.get('nodeName').toUpperCase() === "INPUT" ) {
+			intendedTarget = target;
+		}
 
-		if ( target.get('className').indexOf('nwt_') !== -1 ) {
+		if ( target.get('className').indexOf('nwt_') !== -1 && (target.get('nodeName').toUpperCase() === "A" || target.get('nodeName').toUpperCase() === "INPUT") ) {
+
 			var actions = classPattern.exec(target.get('className'));
 
 			// Call the callback with the correct scope
@@ -33,20 +40,17 @@ NWTDispatcher.prototype.dispatch = function(e) {
 			handlerFound = true;
 
 			// Use a node object if we are dispatching to a YUI3 callback
-			callback(target);
+			callback(intendedTarget);
 			break;
-		} else if ( target.ancestor('.nwt_event_sink')  ) {
-			var catcher = target.ancestor('.nwt_event_sink');
+		} else if ( target.hasClass('nwt_event_sink') ) {
 
 			e.stop();
 
 			callback = nwt;	
-			callback = callback[catcher.data('callback')].trapEvent;
-			callback(target);
+			callback = callback[target.data('callback')].trapEvent;
+			callback(intendedTarget);
 			handlerFound = true;
 			break;
-		} else {
-			return;
 		}
 
 		target = target.get('parentNode');

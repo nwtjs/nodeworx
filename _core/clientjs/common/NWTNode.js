@@ -79,6 +79,11 @@ NWTNodeInstance.prototype.data = function(property) {
  * @param string Attribute to get
  */
 NWTNodeInstance.prototype.get = function(property) {
+
+	if( property === 'parentNode' ) {
+		return new NWTNodeInstance(this._node[property]);
+	}
+
 	return this._node[property];
 };
 
