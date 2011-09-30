@@ -30,7 +30,7 @@
 		// The nwt_event_sink class handles bubbling if a data-callback attribute is present
 		content.push('<div class="nwt_layout nwt_event_sink" data-callback="layoutManager">');
 
-		content.push('<div class="nwt_layout_inner">');
+		content.push('<div class="nwt_layout_inner' + ( this.initialState ? ' layout_' + this.initialState.join('_') : '' )  + '">');
 
 		for( var i in this.panels ) {
 			content.push('<div class="' + i + '"><div class="inner">');
@@ -41,6 +41,10 @@
 		content.push('</div>'); // End div.nwt_layout_inner
 
 		content.push('</div>'); // End div.nwt_layout
+
+		// Reset vars
+		this.panels = {};
+		this.initialState = null;
 
 	        return content.join('');
         };
@@ -110,6 +114,18 @@
                 return this;
         };
 
+
+	/**
+	 * Returns and generates partial content
+	 * The reason of calling LayoutManagerHelper.partial instead of NWTLayout.partial
+	 * is so we can populate the class of the default display pre render
+	 * @param array Resource array allocator
+	 */
+	LayoutManagerHelper.prototype.partial = function(path) {
+		this.initialState = path;
+		var NWTLayout = global.nwt.load().library('NWTLayout');
+		return NWTLayout.partial(path);
+	};
 
 	root.LayoutManagerHelper = LayoutManagerHelper;
 }(this));

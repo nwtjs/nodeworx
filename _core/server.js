@@ -62,18 +62,18 @@ function getServer(definition) {
 				// Handle special _nwt requests
 				// This calls an internal entrypoint to handle a private request
 				// E.g., _nwt/model_updater/model/ChatModel
-				var rootFolder = __dirname  + '/../' + definition.folder + '/views/',
-					layoutOverride = false;
+				global.context().siteRoot = __dirname  + '/../' + definition.folder + '/views/';
+				var layoutOverride = false;
+
 				if( pathname.indexOf('_nwt') !== -1  ) {
-					rootFolder = __dirname + '/';
+					global.context().siteRoot = __dirname + '/';
 					controller = 'private';
 					layoutOverride = 'empty';
 				}
 
 				// Now load in the layout file
 				// Read the file and perform an eval on it, this is how we will typically access templates to keep them clean
-				var viewContent = fs.readFileSync(rootFolder + controller + '/' + action + '.js'),
-					NWTLayout = global.nwt.load().library('NWTLayout'),
+				var NWTLayout = global.nwt.load().library('NWTLayout'),
 
 					// Holds request params that came in from a /key/value format
 					params = {};
@@ -98,7 +98,7 @@ function getServer(definition) {
 						params.layout = 'empty';
 					}
 
-					NWTLayout._loadView(viewContent, params);
+					NWTLayout._loadView([controller, action], params);
 
 					content = NWTLayout + ''
 
