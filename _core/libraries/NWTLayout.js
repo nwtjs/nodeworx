@@ -1,11 +1,14 @@
 (function(root) {
 
+	var fs = require('fs');
+
 	/**
 	 * Layout class
 	 * @constructor
 	 */
 	function NWTLayout() {
 		this.content = '';
+		this.params = {};
 	}
 
 
@@ -18,11 +21,27 @@
 
 
 	/**
-	 * Loads in the controller spec to populate data
+	 * Generates and returns content for a partial view
+	 * @param array Resource locator e.g., [viewFolder, view]
 	 */
-	NWTLayout.prototype._loadView = function(viewContent, params) {
+	NWTLayout.prototype.partial = function(path) {
+		this._loadView(path);
+		return this + '';
+	};
 
-		this.params = params;
+
+	/**
+	 * Loads in the controller spec to populate data
+	 * @param array Resource locator
+	 * @param object Params object to store
+	 */
+	NWTLayout.prototype._loadView = function(resource, params) {
+
+		if( params ) {
+			this.params = params;
+		}
+
+		var viewContent = fs.readFileSync(global.context().siteRoot + resource[0] + '/' + resource[1] + '.js');
 
 		// Trigger the toString() method
 		viewContent += '';
@@ -105,12 +124,13 @@
 	 * Renders the entire content of the layout
 	 */
 	NWTLayout.prototype.toString = function() {
-
 		// Run the prefilter
-		if( this.definition.preFilter !== undefined ) {
+		if( this.definition && this.definition.preFilter !== undefined ) {
 			console.log('passing in params: ', this.params);
 			this.definition.preFilter(this.params);
 		}
+
+		this.params.layout = this.params.layout || 'default';
 
 		var layoutClass = require('./../views/layouts/' + this.params.layout + '.js'),
 			content = layoutClass.NWTViewLayoutWrapper(this);
