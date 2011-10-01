@@ -1,4 +1,4 @@
-var connections = require('./../config.connections.js').connections,
+var connections = require('./../config.connections.js'),
 url = require('url'),
 nwt = require('./libraries/nwt.js'),
 fs = require('fs'),
@@ -13,9 +13,17 @@ var mimeTypes = {
     "js": "text/javascript",
     "css": "text/css"};
 
-function getServer(definition) {
+function getServer() {
 
 	var server = http.createServer(function (request, response) {
+
+		var hostName = request.headers.host,
+			hostName = hostName.replace(/^www\./, ''),
+			definition = connections.connections[hostName];
+
+		if( !definition ) {
+			definition = connections.connections.example;
+		}
 
 		var pathname = url.parse(request.url).pathname,
 			filename = './' + (pathname.indexOf('_core') === -1 ? definition.folder  : '' ) + pathname;
@@ -167,10 +175,8 @@ function getServer(definition) {
 		}
 	});
 	
-	server.listen(serverDefinition.port);
-	console.log("Server running on port: " + serverDefinition.port);
+	server.listen(connections.port);
+	console.log("Server running on port: " + connections.port);
 };
 
-for( var i = 0, serverDefinition ; serverDefinition = connections[i] ; i++ ) {
-	getServer(serverDefinition);
-}
+getServer();
