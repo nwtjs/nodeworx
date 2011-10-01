@@ -7,8 +7,7 @@ function NWTTemplateDataBinder() {
  * Triggers a databinder update based on a node
  */
 NWTTemplateDataBinder.prototype.trigger = function(el) {
-	nwt.templateDataBinder.update(el.data('model'));
-	nwt.templateDataBinder.update(el.data('uri'));
+	nwt.templateDataBinder.update(el.data('model'), el.data('uri'));
 };
 
 
@@ -17,7 +16,7 @@ NWTTemplateDataBinder.prototype.trigger = function(el) {
  */
 NWTTemplateDataBinder.prototype.update = function(objClass, path) {
 	nwt.event.fire(objClass + ':nwt:rerender', {
-		model: objClass
+		model: objClass,
 		path: path
 	});
 };
