@@ -40,7 +40,7 @@ NWTNodeInstance.prototype.ancestor = function(selector) {
  * Returns true if the class exists on the node, false if not
  */
 NWTNodeInstance.prototype.hasClass = function(className) {
-	return (this._node.className.indexOf(className) !== -1);
+	return (this._node.className && this._node.className.indexOf(className) !== -1);
 };
 
 
@@ -81,7 +81,9 @@ NWTNodeInstance.prototype.data = function(property) {
 NWTNodeInstance.prototype.get = function(property) {
 
 	if( property === 'parentNode' ) {
-		return new NWTNodeInstance(this._node[property]);
+		var node = this._node[property];
+		if( !node ) { return null; }
+		return new NWTNodeInstance(node);
 	}
 
 	return this._node[property];
