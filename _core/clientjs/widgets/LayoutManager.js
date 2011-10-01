@@ -6,6 +6,9 @@ function NWTLayoutManager() {
  * a div with a class of "nwt_event_sink"
  */
 NWTLayoutManager.prototype.trapEvent = function(el) {
+
+	if( !el ) { return; }
+
 	var resource = el.get('href'),
 		layoutWrapper = el.ancestor('.nwt_layout'),
 		layoutIdentifierParts = resource.split('/');

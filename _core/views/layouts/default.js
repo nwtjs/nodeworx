@@ -1,7 +1,7 @@
 function NWTDefaultLayout(NWTLayout) {
 	var content=['<!DOCTYPE html><html>',
 		'<head>',
-			'<title>', NWTLayout.definition.title, '</title>',
+			'<title>', NWTLayout.definition.pageTitle, '</title>',
 			NWTLayout._stylesheets(),
 		'</head>',
 		'<body>',
