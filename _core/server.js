@@ -144,7 +144,7 @@ function getServer() {
 
 								newData[matchKeys[1]] = processPostParams(child);
 							} else {
-								newData[i] = data[i];
+								newData[i] = data[i].replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 							}
 						}
 
