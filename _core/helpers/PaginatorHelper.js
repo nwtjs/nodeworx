@@ -21,7 +21,7 @@
 		var content = Html.link(this.linkText, '', {
 			'data-model' : this.modelClass,
 			'data-uri' : '/' + global.context().request.controller + '/' + global.context().request.action + '/offset/' + this.linkOffset,
-			'class' : 'nwt_templateDataBinder_trigger'
+			'class' : 'nwt_templateDataBinder_trigger ' + this.className
 		});
 
 		return content;
@@ -38,6 +38,7 @@
 		this.model = model;
 		this.linkText = linkText;
 		this.currentOffset = this.model.params.offset || 0;
+		this.className = 'nwt_previous';
 		this.linkOffset = parseInt(this.currentOffset, 10) - this.model.params.limit;
 		return this + ''; // Auto render for now until we break these out into a separate helper class
 	};
@@ -52,11 +53,8 @@
 		this.modelClass = global.nwt.getClass(model);
 		this.model = model;
 		this.linkText = linkText;
-		
-		console.log('setting params', this.model.params);
-		
-		
 		this.currentOffset = this.model.params.offset || 0;
+		this.className = 'nwt_next';
 		this.linkOffset = parseInt(this.currentOffset, 10) + this.model.params.limit;
 		return this + ''; // Auto render for now until we break these out into a separate helper class
 	};
