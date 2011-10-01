@@ -35,10 +35,18 @@
 
 
 	/**
+	 * Don't do anything when the toString method is called
+	 */
+	NWTModel.prototype.toString = function() {
+		return '';
+	};
+
+
+	/**
 	 * Fetches records that match the params
 	 */
 	NWTModel.prototype.all = function(params) {
-		this.params = params;
+		this.setParams(params);
 		this.dirty = true;
 		return this;
 	};

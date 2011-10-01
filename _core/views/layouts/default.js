@@ -5,7 +5,7 @@ function NWTDefaultLayout(NWTLayout) {
 			NWTLayout._stylesheets(),
 		'</head>',
 		'<body>',
-			NWTLayout.definition.content + '',
+			NWTLayout.getContent(),
 			NWTLayout._beforeBody(),
 		'</body>'];
 
