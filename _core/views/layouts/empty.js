@@ -1,6 +1,6 @@
 function NWTEmptyLayout(NWTLayout) {
 	return JSON.stringify({
-		title: NWTLayout.definition.title,
+		title: NWTLayout.definition.pageTitle,
 		content: NWTLayout.getContent(),
 		scripts : NWTLayout._generateScripts()
 	});

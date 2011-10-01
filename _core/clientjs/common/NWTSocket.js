@@ -47,6 +47,12 @@ function NWTSocketInstance(params) {
 			}
 		}
 
+		// Handle the pageTitle response key update
+		// Update the main title of the page
+		if( response.title !== undefined ) {
+			nwt.one('head title').setContent(response.title);
+		}
+
 		mythis.config.success(response);
 	}
 	if (request.readyState == 4) { return; }
