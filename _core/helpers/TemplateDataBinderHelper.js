@@ -30,9 +30,8 @@
 
 		var objClass = global.nwt.getClass(this.content);
 
-//console.log(global.context());
 		this.content.on('nwt:rerender', function(args){
-			nwt.socket.send('/index/chat',{
+			nwt.socket.send(args.path,{
 				success: function(response) {
 					var tempElement = document.createElement('div');
 					tempElement.innerHTML = response.content;

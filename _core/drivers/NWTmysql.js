@@ -63,6 +63,10 @@ NWTmysql.prototype.find = function(params) {
 
 	buildQuery.push(this.model.tableName);
 
+	if( params.limit  ) {
+		buildQuery.push(' LIMIT ' + params.limit);
+	}
+
 	buildQuery = buildQuery.join('');
 
 	console.log('Querying with: ', buildQuery);

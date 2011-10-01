@@ -13,10 +13,19 @@
 
 
 	/**
+	 * Returns the content from this object
+	 * Implodes the content if it's an array
+	 */
+	NWTLayout.prototype.getContent = function() {
+		var content = this.definition.content;
+		return content + '';
+	};
+
+	/**
 	 * Binds model data to a callback
 	 */
 	NWTLayout.prototype.bind = function(model, method, params, callback) {
-		return model + moethod;
+		return model + method;
 	};
 
 
@@ -76,6 +85,14 @@
 		console.log('View content is: ', viewContent);
 
 		eval('this.definition = ' + viewContent + ';');
+
+		// Use closures to give the preFilter access to declared vars here if it exists
+		if( this.definition.preFilter ) {
+			var oldPrefilter = this.definition.preFilter;
+			this.definition.preFilter = function(params) {
+				oldPrefilter(params);
+			};
+		}
 	};
 
 	NWTLayout.prototype._stylesheets = function() {
