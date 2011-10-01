@@ -1,3 +1,4 @@
+
 (function(root) {
 
 	var nwtHelperInstance = global.nwt.load().library('NWTHelperInstance', false);
@@ -14,7 +15,7 @@
 	global.nwt.extend(NWTModelRender, nwtHelperInstance);
 
 	NWTModelRender.prototype.render = function() {
-		return this.content;
+		return this.before + this.content + this.after;
 	};
 
 
@@ -28,6 +29,12 @@
 
 		// Conditional params
 		this.params = {};
+
+		// Set the offset from the request params
+		this.params.offset = global.context().request.params.offset || 0;
+		if( this.params.offset < 0 ) {
+			this.params.offset = 0;
+		}
 
 		// Holds data
 		this._data = [];

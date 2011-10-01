@@ -20,7 +20,7 @@
 	PaginatorHelper.prototype.render = function() {
 		var content = Html.link(this.linkText, '', {
 			'data-model' : this.modelClass,
-			'data-uri' : '/' + global.context().request.controller + '/' + global.context().request.action,
+			'data-uri' : '/' + global.context().request.controller + '/' + global.context().request.action + '/offset/' + this.linkOffset,
 			'class' : 'nwt_templateDataBinder_trigger'
 		});
 
@@ -37,9 +37,9 @@
 		this.modelClass = global.nwt.getClass(model);
 		this.model = model;
 		this.linkText = linkText;
-		this.currentOffset = this.model.offset || 0;
-		this.linkOffset = this.currentOffset - this.model.limit;
-		return this;
+		this.currentOffset = this.model.params.offset || 0;
+		this.linkOffset = parseInt(this.currentOffset, 10) - this.model.params.limit;
+		return this + ''; // Auto render for now until we break these out into a separate helper class
 	};
 
 
@@ -52,9 +52,13 @@
 		this.modelClass = global.nwt.getClass(model);
 		this.model = model;
 		this.linkText = linkText;
-		this.currentOffset = this.model.offset || 0;
-		this.linkOffset = this.currentOffset + this.model.limit;
-		return this;
+		
+		console.log('setting params', this.model.params);
+		
+		
+		this.currentOffset = this.model.params.offset || 0;
+		this.linkOffset = parseInt(this.currentOffset, 10) + this.model.params.limit;
+		return this + ''; // Auto render for now until we break these out into a separate helper class
 	};
 
 

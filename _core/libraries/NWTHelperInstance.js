@@ -5,6 +5,14 @@
 	 */
 	function NWTHelperInstance() {
 		this.isRenderable = true;
+
+		// Generic content display hook. Displays before generated content
+		// This should display inside of any helper wrapper tag
+		this.before = '';
+
+		// Generic content display hook. Displays after generated content
+		// This should display inside of any helper wrapper tag
+		this.after = '';
 	}
 
 
@@ -59,6 +67,28 @@
 
 		this._events.push({event: global.nwt.getClass(this) + ':' + event, callback: callback.toString()});
 
+		return this;
+	};
+
+
+	/**
+	 * Sets the before content of this helper instance
+	 * The before content appears beforeany user specified content
+	 * @chainable
+	 */
+	NWTHelperInstance.prototype.before = function(content) {
+		this.before = content;
+		return this;
+	};
+
+
+	/**
+	 * Sets the after content of this helper instance
+	 * The after content appears after any user specified content
+	 * @chainable
+	 */
+	NWTHelperInstance.prototype.after = function(content) {
+		this.after = content;
 		return this;
 	};
 

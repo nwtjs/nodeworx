@@ -65,6 +65,9 @@ NWTmysql.prototype.find = function(params) {
 
 	if( params.limit  ) {
 		buildQuery.push(' LIMIT ' + params.limit);
+		if( params.offset && !isNaN(params.offset) ) {
+			buildQuery.push(' OFFSET ' + params.offset);
+		}
 	}
 
 	buildQuery = buildQuery.join('');
