@@ -71,6 +71,13 @@ NWTmysql.prototype.find = function(params) {
 		}
 	}
 
+	if( params.order  ) {
+		buildQuery.push(' ORDER BY ');
+		for( var i in params.order ) {
+			buildQuery.push(i + ' ' + params.order[i]);
+		}
+	}
+
 	if( params.limit  ) {
 		buildQuery.push(' LIMIT ' + params.limit);
 		if( params.offset && !isNaN(params.offset) ) {

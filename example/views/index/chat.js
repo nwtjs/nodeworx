@@ -14,6 +14,6 @@
 	.utilize(ChatModel)
 	.on('success', function(result) {
 		nwt.one('#ChatContent').set('value', '');
-		nwt.templateDataBinder.update('ChatModel');
+		nwt.templateDataBinder.update('ChatModel', '/index/chat');
 	})
 }

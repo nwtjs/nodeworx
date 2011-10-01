@@ -36,13 +36,13 @@ NWTDispatcher.prototype.dispatch = function(e) {
 				console.log(callback, nextClass);
 				callback = callback[nextClass];
 			}
-console.log('got callback', callback);
+
 			handlerFound = true;
 
 			// Use a node object if we are dispatching to a YUI3 callback
 			callback(intendedTarget);
 			break;
-		} else if ( target.hasClass('nwt_event_sink') ) {
+		} else if ( target._node && target.hasClass('nwt_event_sink') ) {
 
 			e.stop();
 

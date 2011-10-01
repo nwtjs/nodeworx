@@ -4,3 +4,9 @@ Node Web Toolkit (NWT) is a drastic departure from traditional web frameworks. N
 
 For more information, visit: htttp://nwtjs.org/
 
+
+*Using NWT*
+
+1 - Grab the code
+2 - Run the server: node _core/server.js
+3 - Navigate to your hostname (defaults to port 80). This will launch the example app.
