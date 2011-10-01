@@ -9,15 +9,21 @@ function NWTEventManager() {
 /**
  * Implements an event listener
  * @param object Object which wraps the event
+ * @param bool Pass as true to not reset the existing listeners
  */
-NWTEventManager.prototype.implement = function(eventSpecs) {
+NWTEventManager.prototype.implement = function(eventSpecs, doNotReset) {
 
 	for( var i = 0 , eventSpec ; eventSpec = eventSpecs[i] ; i++ ) {
 
-		if ( this.events[eventSpec.event] === undefined ) {
+		// I'm fairly certain that we can just remove this and always reset the events
+		if( doNotReset ) {
+			if ( this.events[eventSpec.event] === undefined ) {
+				this.events[eventSpec.event] = [];
+			}
+		} else {
 			this.events[eventSpec.event] = [];
 		}
-	
+
 		eval( 'var callback = ' + eventSpec.callback + ";");
 	
 		this.events[eventSpec.event].push(callback);

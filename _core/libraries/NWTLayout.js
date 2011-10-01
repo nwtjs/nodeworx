@@ -34,7 +34,7 @@
 	 * @param array Resource locator e.g., [viewFolder, view]
 	 */
 	NWTLayout.prototype.partial = function(path) {
-		this._loadView(path);
+		this._loadView(path, {layout: 'none'});
 		return this + '';
 	};
 

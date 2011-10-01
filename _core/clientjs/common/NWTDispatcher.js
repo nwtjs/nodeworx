@@ -24,7 +24,7 @@ NWTDispatcher.prototype.dispatch = function(e) {
 			intendedTarget = target;
 		}
 
-		if ( target.get('className').indexOf('nwt_') !== -1 && (target.get('nodeName').toUpperCase() === "A" || target.get('nodeName').toUpperCase() === "INPUT") ) {
+		if ( target.get('className') && target.get('className').indexOf('nwt_') !== -1 && (target.get('nodeName').toUpperCase() === "A" || target.get('nodeName').toUpperCase() === "INPUT") ) {
 
 			var actions = classPattern.exec(target.get('className'));
 
@@ -36,7 +36,7 @@ NWTDispatcher.prototype.dispatch = function(e) {
 				console.log(callback, nextClass);
 				callback = callback[nextClass];
 			}
-
+console.log('got callback', callback);
 			handlerFound = true;
 
 			// Use a node object if we are dispatching to a YUI3 callback

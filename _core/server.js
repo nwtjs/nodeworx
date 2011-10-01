@@ -102,6 +102,8 @@ function getServer(definition) {
 						params.layout = 'empty';
 					}
 
+					global.context().request.params = params;
+
 					NWTLayout._loadView([controller, action], params);
 
 					content = NWTLayout + ''
