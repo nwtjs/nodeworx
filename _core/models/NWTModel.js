@@ -15,7 +15,10 @@
 	global.nwt.extend(NWTModelRender, nwtHelperInstance);
 
 	NWTModelRender.prototype.render = function() {
-		return this.before + this.content + this.after;
+		this.beforeContent = this.beforeContent || '';
+		this.afterContent = this.afterContent || '';
+
+		return this.beforeContent + this.content + this.afterContent;
 	};
 
 
@@ -63,8 +66,18 @@
 	 * Fetches a single record
 	 */
 	NWTModel.prototype.one = function(params) {
-		this.setParams({limit : 1});
+		params.limit = 1;
+		this.setParams(params);
 		return this.all(params);
+	};
+
+
+	/**
+	 * Fetches a single record based on id
+	 */
+	NWTModel.prototype.get = function(id) {
+		var params = {where: {id : id}};
+		return this.one(params);
 	};
 
 
