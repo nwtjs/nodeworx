@@ -63,6 +63,14 @@ NWTmysql.prototype.find = function(params) {
 
 	buildQuery.push(this.model.tableName);
 
+	if( params.where ) {
+		buildQuery.push(' WHERE 1=1 ');
+
+		for( var i in params.where ) {
+			buildQuery.push(' AND ' + i + ' = ' + params.where[i]);
+		}
+	}
+
 	if( params.limit  ) {
 		buildQuery.push(' LIMIT ' + params.limit);
 		if( params.offset && !isNaN(params.offset) ) {

@@ -8,11 +8,11 @@
 
 		// Generic content display hook. Displays before generated content
 		// This should display inside of any helper wrapper tag
-		this.before = '';
+		this.beforeContent = '';
 
 		// Generic content display hook. Displays after generated content
 		// This should display inside of any helper wrapper tag
-		this.after = '';
+		this.afterContent = '';
 	}
 
 
@@ -77,7 +77,7 @@
 	 * @chainable
 	 */
 	NWTHelperInstance.prototype.before = function(content) {
-		this.before = content;
+		this.beforeContent = content;
 		return this;
 	};
 
@@ -88,7 +88,7 @@
 	 * @chainable
 	 */
 	NWTHelperInstance.prototype.after = function(content) {
-		this.after = content;
+		this.afterContent = content;
 		return this;
 	};
 
