@@ -7,7 +7,7 @@ function NWTLayoutManager() {
  */
 NWTLayoutManager.prototype.trapEvent = function(el) {
 
-	if( !el ) { return; }
+	if( !el || !el.get('href') ) { return; }
 
 	var resource = el.get('href'),
 		layoutWrapper = el.ancestor('.nwt_layout'),

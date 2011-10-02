@@ -71,10 +71,70 @@
 
 
 	/**
+	 * Renders a file upload control
+	 */
+	FormField.prototype.render_file = function() {
+		return this.render_text();
+	};
+
+
+	/**
+	 * Renders a password input
+	 */
+	FormField.prototype.render_password = function() {
+		// Always reset the values
+		this.attributes.value = '';
+		return this.render_text();
+	};
+
+
+	/**
 	 * Renders a radio button
 	 */
 	FormField.prototype.render_radio = function() {
 		return this.render_text();
+	};
+
+
+	/**
+	 * Renders a "grouped" set of radio buttons
+	 */
+	FormField.prototype.render_radiogroup = function() {
+		return this.render_grouped('radio');
+	};
+
+
+	/**
+	 * Renders a "grouped" set of checkboxes
+	 */
+	FormField.prototype.render_checkboxgroup = function() {
+		return this.render_grouped('checkbox');
+	};
+
+
+	/**
+	 * Renders a "grouped" set of controls
+	 * See FormField.render_radiogroup and FormField.render_checkboxgroup
+	 */
+	FormField.prototype.render_grouped = function(fieldType) {
+
+		var optionMarkup = '',
+			options = this.get('attributes').options || {};
+
+		for( var i in options ) {
+
+			optionMarkup += new FormField([this.key,
+			{
+				type: fieldType,
+				value : i,
+				label: options[i],
+				name: this.attributes.name + (fieldType == 'checkbox' ? '[' + i + ']' : '' ),
+				id: this.attributes.id + '[' + i + ']'
+
+			}]);
+		}
+
+		return '<div class="grouped">' + optionMarkup + '</div>';
 	};
 
 

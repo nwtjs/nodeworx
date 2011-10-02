@@ -42,7 +42,7 @@ NWTDispatcher.prototype.dispatch = function(e) {
 			// Use a node object if we are dispatching to a YUI3 callback
 			callback(intendedTarget);
 			break;
-		} else if ( target._node && target.hasClass('nwt_event_sink') ) {
+		} else if ( target._node && target.hasClass('nwt_event_sink') && intendedTarget && intendedTarget.get('nodeName').toUpperCase() === "A" ) {
 
 			e.stop();
 
