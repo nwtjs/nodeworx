@@ -6,6 +6,11 @@
 	 * Form field helper
 	 */
 	function FormField(attributes) {
+		
+		// Before and after are handled by NWTHelperInstance
+		// So far, "betweenContent" is only used for forms
+		this.betweenContent = '';
+		
 		this.key = attributes[0];
 		this.attributes = attributes[1] || {};
 
@@ -53,12 +58,25 @@
 	FormField.prototype.render = function() {
 		var content = [
 			'<div class="row ', this.get('type'), '">',
+				this.beforeContent,
 				'<label for="', this.get('attributes').id,'">', this.get('label'), '</label>',
+				this.betweenContent,
 				this['render_' + this.get('type')](),
+				this.afterContent,
 			'</div>'
 		];
 
 		return content.join('');
+	};
+
+
+	/**
+	 * Sets the "betweenContent" property
+	 * This gets rendered between the label and input
+	 */
+	FormField.prototype.between = function(content) {
+		this.betweenContent = content;
+		return this;
 	};
 
 
@@ -248,7 +266,8 @@
 	 * @param string Key for the field e.g., Model.column_name
 	 */
 	FormHelper.prototype.field = function() {
-		this._fields.push( new FormField(arguments) );
+		var newField = new FormField(arguments);
+		return newField;
 	};
 
 
