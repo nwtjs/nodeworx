@@ -48,7 +48,7 @@
 		global.nwt.requireScript('widgets/TabView');
 
 		var initialContent = "",
-			content = ['<div class="tab_view"><ul>'];
+			content = ['<div class="tab_view"><div class="tabs"><ul>'];
 
 		for( var i = 0, tab; tab = this.tabs[i] ; i++ ) {
 	
@@ -60,7 +60,7 @@
 			content.push('<li class="' + className + '">' + Html.link(tab.label, '/#!/' + tab.resource.join('/'), {class: 'nwt_tabview_open'}) + '</li>');
 		}
 
-		content.push('</ul><div class="tab_content">', initialContent, '</div></div>');
+		content.push('</ul></div><div class="tab_content">', initialContent, '</div></div>');
 
 		// Reset the tabs
 		this.tabs = [];

@@ -137,8 +137,14 @@
 
 		global.context().clientScripts.push('widgets/Form');
 
+		var formPath = "#";
+
+		if( this._model ) {
+			formPath = '/_nwt/model_updater/model/' + global.nwt.getClass(this._model)
+		}
+
 		var content = [
-			this._open('/_nwt/model_updater/model/' + global.nwt.getClass(this._model)),
+			this._open(formPath),
 			this._fields.join(''),
 			this._close()
 		];
