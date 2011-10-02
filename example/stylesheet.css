@@ -5,7 +5,12 @@
 }
 
 body {
-	padding:100px 200px;
+	background:#333333;
+}
+
+.nwt_root {
+	margin:0 auto;
+	width:800px;	
 }
 
 .tab_view .tabs ul {
@@ -22,14 +27,17 @@ body {
 .docs_left {
 	float:left;
 	width:200px;
+	padding:10px 10px 10px 0;
 	background:#CCC;
 }
 
 .docs_left ul li {
 	list-style-type:none;
+	padding-left:10px;
 }
 
 .docs_main {
 	float:left;
+	width:570px;
 	padding:0 0 0 15px;
 }

@@ -56,6 +56,10 @@
 			Form.field('Form.file', {
 				type: 'file'
 			}),
+			Form.field('Form.someField')
+				.before('test before')
+				.between(' | TEST BETWEEN | ')
+				.after('test after'),
 			Form.submit('Submit')
 		)
 }		
