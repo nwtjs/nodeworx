@@ -115,5 +115,36 @@
 		context.clientScripts.push(script);
 	};
 
+
+	/**
+	 * Sleeps until a specified key is available on an object
+	 * This is blocking for the request (unless we are running other fibers),
+	  * but non-blocking for other fibers.
+	 * @param object Object we are polling
+	 * @param string Object key we are looking for
+	 */
+	NWTUtils.prototype.waitForAvailable = function(obj, class) {
+		require('fibers');
+		var current = Fiber.current,
+		
+		// How long to sleep for
+		timeout = 5;
+
+		// Set the timeout so the fiber will pick back up again
+		// We have a simple backoff strategy 
+		var resumeFiber = function() {
+			if( obj[class] ) {
+				current.run();
+			} else {
+				timeout += timeout;
+				setTimeout(resumeFiber, timeout);
+			}
+		};
+
+		setTimeout(resumeFiber, timeout);
+		yield();
+	};
+
+
 	global.nwt = new NWTUtils();
 }(this));

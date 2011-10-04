@@ -5,6 +5,8 @@ fs = require('fs'),
 http = require('http'),
 path = require('path');
 
+require('fibers');
+
 var mimeTypes = {
     "html": "text/html",
     "jpeg": "image/jpeg",
@@ -16,7 +18,7 @@ var mimeTypes = {
 function getServer() {
 
 	var server = http.createServer(function (request, response) {
-
+	Fiber(function(){
 		var hostName = request.headers.host,
 			hostName = hostName.replace(/^www\./, ''),
 			definition = connections.connections[hostName];
@@ -173,6 +175,7 @@ function getServer() {
 				console.log(content + '', e, e.stack);
 			}
 		}
+	}).run(); // End Fiber() wrap
 	});
 	
 	server.listen(connections.port);

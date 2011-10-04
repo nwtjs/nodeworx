@@ -1,0 +1,20 @@
+{
+	"name": "nwt",
+	"version": "0.0.1",
+	"description": "Node Web Toolkit",
+	"keywords": ["nwt"],
+	"homepage": "https://nwtjs.org",
+	"author": "Kevin Grandon <kevingrandon@yahoo.com> (https://github.com/KevinGrandon/)",
+	"dependencies": {
+	    "fibers": "0.5",
+	},
+	"main": "nwt",
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/nwtjs/nwt.git"
+	},
+	"os": ["macos", "linux"],
+	"engines": {
+		"node": ">=0.5.2"
+	}
+}
