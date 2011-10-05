@@ -4,10 +4,16 @@
  */
 function NWTmysql(config, model) {
 	this.model = model;
-	var mysql = require(__dirname + '/../external/node-mysql-libmysqlclient/mysql-libmysqlclient.js');
+	var mysql = require('mysql');
 
-	this.client = mysql.createConnectionSync();
-	this.client.connectSync(config.host, config.username, config.password, config.database);
+	this.client = mysql.createClient({
+		host: config.host,
+		port: config.port,
+		user: config.username,
+		password: config.password,
+	});
+
+	this.client.query('USE '+config.database);
 
 	return this;
 }
@@ -44,14 +50,17 @@ NWTmysql.prototype.save = function(data) {
 		buildQuery.push(' WHERE id = ' + data.id);
 	}
 
-	try {
-		var result = this.client.querySync(buildQuery.join('') + ";")
-	} catch(e) {
-		console.log('Query failed ', buildQuery.join(''));
-	}
+	var returnData = {};
 
-	if( result ) {
-		this.model.lastInsertId = this.client.lastInsertIdSync();
+	this.client.querySync(buildQuery.join('') + ";", function(error, results){
+		console.log('Got mysql results', results);
+		returnData.insertId = results.insertId;
+	});
+
+	global.context().fiber.waitFor(returnData, 'insertId');
+
+	if( returnData ) {
+		this.model.lastInsertId = returnData.insertId;
 	}
 };
 
@@ -89,13 +98,19 @@ NWTmysql.prototype.find = function(params) {
 
 	console.log('Querying with: ', buildQuery);
 
-	var result = this.client.querySync(buildQuery + ";");
+	var returnData = {};
 
-	var returnData = result.fetchAllSync();
+	this.client.query(buildQuery + ";", function(error, results){
+		console.log('Got mysql results', results);
+		returnData.error = error;
+		returnData.results = results;
+	});
+
+	global.context().fiber.waitFor(returnData, 'results');
 
 	console.log('Got data ', returnData);
 
-	return returnData;
+	return returnData.results;
 };
 
 exports.client = NWTmysql;
