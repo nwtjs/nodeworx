@@ -1,7 +1,7 @@
 (function(root) {
 
 	// The port to listen on for connections
-	root.port = 80;
+	root.port = 9090;
 
 	// A mapping of hostname to site definitions
 	// Each site definition should have a folder which corresponds to a 

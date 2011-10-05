@@ -122,8 +122,8 @@
 	  * but non-blocking for other fibers.
 	 * @param object Object we are polling
 	 * @param string Object key we are looking for
-	 */
-	NWTUtils.prototype.waitForAvailable = function(obj, class) {
+	 *
+	NWTUtils.prototype.waitForAvailable = function(obj, classKey) {
 		require('fibers');
 		var current = Fiber.current,
 		
@@ -133,7 +133,7 @@
 		// Set the timeout so the fiber will pick back up again
 		// We have a simple backoff strategy 
 		var resumeFiber = function() {
-			if( obj[class] ) {
+			if( obj[classKey] ) {
 				current.run();
 			} else {
 				timeout += timeout;
@@ -144,7 +144,7 @@
 		setTimeout(resumeFiber, timeout);
 		yield();
 	};
-
+*/
 
 	global.nwt = new NWTUtils();
 }(this));

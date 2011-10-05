@@ -18,6 +18,29 @@ var mimeTypes = {
 function getServer() {
 
 	var server = http.createServer(function (request, response) {
+
+		var waitFor = function(obj, classKey) {
+			var current = Fiber.current,
+
+			// How long to sleep for
+			timeout = 5;
+			
+			// Set the timeout so the fiber will pick back up again
+			// We have a simple backoff strategy
+			var resumeFiber = function() {
+				if( obj[classKey] ) {
+				console.log('Object populated, resume fiber. Context is: ', global.context(), global.context().clientScripts);
+				current.run();
+			} else {
+				timeout += timeout;
+				setTimeout(resumeFiber, timeout);
+			}
+		};
+
+		setTimeout(resumeFiber, timeout);
+		yield();
+	};
+
 	Fiber(function(){
 		var hostName = request.headers.host,
 			hostName = hostName.replace(/^www\./, ''),
@@ -66,9 +89,12 @@ function getServer() {
 					request: {
 						controller: controller,
 						action: action
+					},
+					fiber: {
+						waitFor: waitFor
 					}
 				};
-
+console.log('Resetting context!');
 				global.context = function() {
 					return contextObject;
 				};
@@ -114,15 +140,19 @@ function getServer() {
 
 					global.context().request.params = params;
 
-					NWTLayout._loadView([controller, action], params);
+					Fiber(function(){
+						NWTLayout._loadView([controller, action], params);
 
-					content = NWTLayout + ''
+						content = NWTLayout + '';
 
-					// Reset the context holder
-					contextObject = {};
+						// Reset the context holder
+	                                        console.log('Resetting contextObject after fiber.');
+	                                        contextObject = {};
 
-					// Append empty string to always trigger the toString method
-					response.end(content + '');
+        	                                // Append empty string to always trigger the toString method
+                	                        response.end(content + '');
+
+					}).run();
 				};
 
 

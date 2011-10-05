@@ -5,8 +5,8 @@
 function NWTmongo(config, model) {
 	this.model = model;
 
-	var Db = require(__dirname + '/../external/node-mongodb-native/lib/mongodb').Db,
-		Server = require(__dirname + '/../external/node-mongodb-native/lib/mongodb').Server;
+	var Db = require('mongodb').Db,
+		Server = require('mongodb').Server;
 
 	this.client = new Db(
 		config.database,
@@ -47,28 +47,37 @@ NWTmongo.prototype.save = function(data) {
 		delete data.id;
 	}
 
-	global.nwt.waitForAvailable(this, 'dataClient');
+	global.context().fiber.waitFor(this, 'dataClient');
 
-	this.dataClient.insert(data, function(err, docs){
-		console.log('data inserted');
+	var returnObj = {};
+
+	this.dataClient.insert(data, function(error, docs){
+		returnObj.docs = docs;
+		returnObj.error = error;
 	});
 	
-	if( result ) {
-		this.model.lastInsertId = this.client.lastInsertIdSync();
+	global.context().fiber.waitFor(returnObj, 'docs');
+
+	if( returnObj.docs ) {
+		this.model.lastInsertId = returnObj.docs[0]._id;
 	}
 };
 
 NWTmongo.prototype.find = function(params) {
+	console.log('Got find request');
 
-	global.nwt.waitForAvailable(this, 'dataClient');
+	global.context().fiber.waitFor(this, 'dataClient');
 
-	this.dataClient.find().toArray(function(err, results) {
-		// docs.forEach
-		console.log('Got documents', results);
+	var returnObj = {};
+
+	this.dataClient.find().toArray(function(error, results) {
+		returnObj.error = error;
+		returnObj.results = results;
 	});
 
+	global.context().fiber.waitFor(returnObj, 'results');
 
-	return {};
+	return returnObj.results;
 };
 
 exports.client = NWTmongo;

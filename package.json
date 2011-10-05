@@ -1,13 +1,14 @@
 {
 	"name": "nwt",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"description": "Node Web Toolkit",
 	"keywords": ["nwt"],
 	"homepage": "https://nwtjs.org",
 	"author": "Kevin Grandon <kevingrandon@yahoo.com> (https://github.com/KevinGrandon/)",
 	"dependencies": {
 	    "fibers": "0.6.1",
-	    "mysql": "0.9.4"
+	    "mysql": "0.9.4",
+            "mongodb" : "0.9.6-20"
 	},
 	"main": "nwt",
 	"repository": {
