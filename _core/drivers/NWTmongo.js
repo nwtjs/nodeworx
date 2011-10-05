@@ -30,12 +30,6 @@ function NWTmongo(config, model) {
 		p_client.collection(mythis.model.tableName, useCollection);
 	});
 
-/*
-	var modelSchema = new Schema(this.model.fields);
-
-	var clientModel = mongoose.model(this.model.tableName, modelSchema);
-	this.client = new clientModel();
-*/
 	return this;
 }
 
@@ -70,7 +64,21 @@ NWTmongo.prototype.find = function(params) {
 
 	var returnObj = {};
 
-	this.dataClient.find().toArray(function(error, results) {
+	var findParams = {};
+
+	var mongoCursor = this.dataClient.find(findParams);
+
+	if( params.order ) {
+		for( var i in params.order ) {
+			mongoCursor.sort([i, params.order[i]]);
+		}
+	}
+
+	if( params.limit ) {
+		mongoCursor.limit(params.limit);
+	}
+
+	mongoCursor.toArray(function(error, results) {
 		returnObj.error = error;
 		returnObj.results = results;
 	});
