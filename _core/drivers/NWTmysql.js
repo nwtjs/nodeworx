@@ -52,7 +52,7 @@ NWTmysql.prototype.save = function(data) {
 
 	var returnData = {};
 
-	this.client.querySync(buildQuery.join('') + ";", function(error, results){
+	this.client.query(buildQuery.join('') + ";", function(error, results){
 		console.log('Got mysql results', results);
 		returnData.insertId = results.insertId;
 	});
