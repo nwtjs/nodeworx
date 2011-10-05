@@ -1,9 +1,9 @@
 {
 	"name": "nwt",
-	"version": "0.0.3",
-	"description": "Node Web Toolkit",
+	"version": "0.0.5",
+	"description": "Node Web Toolkit - A drastic departure from standard web application frameworks.",
 	"keywords": ["nwt"],
-	"homepage": "https://nwtjs.org",
+	"homepage": "http://nwtjs.org",
 	"author": "Kevin Grandon <kevingrandon@yahoo.com> (https://github.com/KevinGrandon/)",
 	"dependencies": {
 	    "fibers": "0.6.1",
