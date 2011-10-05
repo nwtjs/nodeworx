@@ -1,6 +1,6 @@
 {
 	"name": "nwt",
-	"version": "0.0.5",
+	"version": "0.0.6",
 	"description": "Node Web Toolkit - A drastic departure from standard web application frameworks.",
 	"keywords": ["nwt"],
 	"homepage": "http://nwtjs.org",
