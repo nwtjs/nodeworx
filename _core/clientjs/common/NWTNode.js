@@ -135,27 +135,27 @@ NWTNodeInstance.prototype.serialize = function() {
               case 'radio':
                 if( el.checked ) {
                   if( retVal.length > 0 ) {
-                    retVal  = '&';
+                    retVal += '&';
                   }
-                  retVal  = el.name + '=' + encodeURIComponent(el.value);
+                  retVal += el.name + '=' + encodeURIComponent(el.value);
                 }
                 break;
               case 'hidden':
               case 'password':
               case 'text':
                 if( retVal.length > 0 ) {
-                  retVal  = '&';
+                  retVal  += '&';
                 }
-                retVal  = el.name + '=' + encodeURIComponent(el.value);
+                retVal += el.name + '=' + encodeURIComponent(el.value);
                 break;
             }
             break;
           case 'select':
           case 'textarea':
             if( retVal.length > 0 ) {
-              retVal  = '&';
+              retVal  += '&';
             }
-            retVal  = el.name  + '=' + encodeURIComponent(el.value);
+            retVal += el.name  + '=' + encodeURIComponent(el.value);
             break;
         }
       }
