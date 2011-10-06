@@ -18,6 +18,9 @@ NWTDispatcher.prototype.dispatch = function(e) {
 		// Tends to be either an input, or anchor
 		intendedTarget = false;
 
+	// Check and see if there is a target="_blank" on the link, of so, return
+	if( target.get('target') == '_blank' ) { return; }
+
 	while( target.get('parentNode') ) {
 
 		if( target.get('nodeName').toUpperCase() === "A" || target.get('nodeName').toUpperCase() === "INPUT" ) {

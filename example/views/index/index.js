@@ -3,10 +3,21 @@
 	
 	css: ['stylesheet.css'],
 
-	content: Html.h1('NWT') +
-	TabView.
-		addDynamic('Home', ['index', 'home'], {preload: true}).
-		addDynamic('Docs', ['docs', 'index']).
-		addDynamic('Chat', ['index', 'chat']).
-		addDynamic('Download', ['index', 'download'])
+	content: LayoutManager
+                .top(
+						Html.h1(
+							Html.link('NWT', 'index/home')
+						) +
+						'<div class="nav">' +
+                        Html.list(
+                                Html.link('Home', 'index/home'),
+                                Html.link('Docs', 'docs/index'),
+                                Html.link('Chat', 'index/chat'),
+                                Html.link('Download', 'index/download')
+                        ) +
+						'</div>'
+                )
+                .main(
+                        LayoutManager.partial(['index', 'home'])
+                )
 }

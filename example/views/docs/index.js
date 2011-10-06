@@ -19,5 +19,6 @@
 				Html.link('LayoutManager Helper', '/docs/helpers_layoutmanager')
 			)
 		))
-		.main('Welcome to the NWT docs')
+		.main('Welcome to the NWT docs') +
+		'<div style="clear:both;"></div>'
 }
