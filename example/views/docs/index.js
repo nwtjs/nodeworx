@@ -6,7 +6,8 @@
 		.left(Html.list(
 			Html.link('NWT Basics', '/docs/basics') +
 			Html.list(
-				Html.link('Development Methodologies', '/docs/basics_methodologies'),
+				Html.link('Installation', '/docs/basics_installation'),
+				Html.link('Methodologies', '/docs/basics_methodologies'),
 				Html.link('Directory Structure', '/docs/basics_structure')
 			),
 			Html.link('View Helpers', '/docs/helpers') +
