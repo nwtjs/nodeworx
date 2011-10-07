@@ -5,9 +5,11 @@
 
 	content: LayoutManager
                 .top(
+						'<div class="header">'+
 						Html.h1(
 							Html.link('NWT', 'index/home')
 						) +
+						'</div>' +
 						'<div class="nav">' +
                         Html.list(
                                 Html.link('Home', 'index/home'),
