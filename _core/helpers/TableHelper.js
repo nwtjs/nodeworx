@@ -125,8 +125,18 @@
 	 * @param object Object to iterate on
 	 * @param function Callback method
 	 */
-	TableHelper.prototype.cellIterator = function(object, callback) {
-		object.iterator(callback, this);
+	TableHelper.prototype.rowIterator = function(object, callback) {
+
+		var mythis = this,
+
+		// Wrap the callback in a function
+		// The callback expects an array return, so implement cells based on that
+		wrappedCallback = function(){
+			var results = callback.apply(mythis, arguments);
+			mythis.cells.apply(mythis, results);
+		};
+
+		object.iterator(wrappedCallback, this);
 		return this;
 	};
 
