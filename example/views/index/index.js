@@ -1,13 +1,13 @@
 {
 	pageTitle: 'Welcome to NWT',
 	
-	css: ['stylesheet.css'],
+	css: ['http://fonts.googleapis.com/css?family=Nova+Square', 'http://fonts.googleapis.com/css?family=Ubuntu+Mono', 'stylesheet.css'],
 
 	content: LayoutManager
                 .top(
 						'<div class="header">'+
 						Html.h1(
-							Html.link('NWT', 'index/home')
+							Html.link('NWT<span>Node Web Toolkit</span>', 'index/home')
 						) +
 						'</div>' +
 						'<div class="nav">' +

@@ -103,7 +103,11 @@
 
 		var stylesheetContent = [];
 		for( var i = 0, path ; path = this.definition.css[i] ; i++ ) {
-			stylesheetContent.push('<link rel="stylesheet"i type="text/css" href="/' + path + '">');
+			if( path.indexOf('http') !== 0 && path.indexOf('/') !== 0 ) {
+				path = '/' + path;
+			}
+
+			stylesheetContent.push('<link rel="stylesheet"i type="text/css" href="' + path + '">');
 		}
 		return stylesheetContent.join('');
 	};
