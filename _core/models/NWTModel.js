@@ -131,8 +131,22 @@
 
 
 	/**
+	 * Takes a callback and context
+	 * Applies the callback for each item in our dataset
+	 */
+	NWTModel.prototype.iterator = function(callback, context) {
+		this._update();
+
+		for( var i = 0, record; record = this._data[i] ; i++) {
+			callback.apply(context, [record]);
+		}
+	};
+
+
+	/**
 	 * Iterates through each record and calls the callback
 	 * If we have not fetched the data, do so
+	 * TODO: Migrate this to use iterator instead
 	 */
 	NWTModel.prototype.each = function(callback) {
 		this._update();

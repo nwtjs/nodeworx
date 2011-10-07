@@ -1,0 +1,8 @@
+exports.db = {
+        host : 'localhost',
+        port : '27017',
+        database: 'test_db',
+        username: '',
+        password: '',
+        driver : 'mongo'
+};

@@ -101,14 +101,14 @@ NWTmysql.prototype.find = function(params) {
 	var returnData = {};
 
 	this.client.query(buildQuery + ";", function(error, results){
-		console.log('Got mysql results', results);
+		//console.log('Got mysql results', results);
 		returnData.error = error;
 		returnData.results = results;
 	});
 
 	global.context().fiber.waitFor(returnData, 'results');
 
-	console.log('Got data ', returnData);
+	//console.log('Got data ', returnData);
 
 	return returnData.results;
 };
