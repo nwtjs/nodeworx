@@ -1,7 +1,8 @@
 {
 	pageTitle: 'Development Methodologies',
 
-	content: Html.p('NWT provides a web framework for: ') +
+	content: Html.h1('Methodologies') +
+	Html.p('NWT provides a web framework for: ') +
 		Html.list(
 			'Rapidly developing applications which look and feel like native desktop applications.',
 			'Flexible model layer which doesn\'t restrict scaling.',

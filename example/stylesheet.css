@@ -151,3 +151,19 @@ body {
 	background: -ms-linear-gradient(top, rgba(255,255,255,0) 0%,rgba(255,255,255,0.5) 50%,rgba(255,255,255,0) 100%); /* IE10+ */
 	background: linear-gradient(top, rgba(255,255,255,0) 0%,rgba(255,255,255,0.5) 50%,rgba(255,255,255,0) 100%); /* W3C */
 }
+
+.example {
+	margin-bottom:24px;
+}
+
+.example pre {
+	border:1px dashed #CCC;
+	padding:15px 15px 5px;
+	margin-bottom:8px;
+	overflow:auto;
+}
+
+.example .renders {
+	padding:5px 15px;
+	border:1px solid #900;
+}

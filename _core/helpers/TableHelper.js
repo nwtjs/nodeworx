@@ -55,6 +55,8 @@
 			content.push('</tr>');
 		}
 
+		content.push(this.close());
+
 		if( !doNotReset ) {
 			this._headers = [];
 			this._cells = [];

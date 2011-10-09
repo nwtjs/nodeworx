@@ -3,9 +3,15 @@
 	/**
 	 * Date helper class
 	 * Allows easy formatting and display of dates
+	 * If any dates are requested without a date, we take the current date
 	 * @constructor
 	 */
 	function DateHelper() {
+	};
+
+
+	DateHelper.prototype.now = function() {
+		return new Date();
 	};
 
 
@@ -18,7 +24,7 @@
 			month = d.getMonth() + 1, //months are zero based
 			year = d.getFullYear();
 
-		return day + '/' + month + '/' + year;
+		return month + '/' + day + '/' + year;
 	};
 
 
@@ -33,7 +39,7 @@
 			hours = d.getHours(),
 			minutes = d.getMinutes();
 
-		return day + '/' + month + '/' + year + ' ' + hours + ':' + minutes ;
+		return month + '/' + day + '/' + year + ' ' + hours + ':' + minutes ;
 	};
 
 

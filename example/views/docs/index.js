@@ -10,6 +10,7 @@
 				Html.link('Methodologies', '/docs/basics_methodologies'),
 				Html.link('Directory Structure', '/docs/basics_structure')
 			),
+			Html.link('View Files', '/docs/views'),
 			Html.link('View Helpers', '/docs/helpers') +
 			Html.list(
 				Html.link('Html Helper', '/docs/helpers_html'),

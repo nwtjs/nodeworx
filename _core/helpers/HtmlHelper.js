@@ -107,7 +107,7 @@
 	 * @constructor
 	 */
 	function HtmlHelper() {
-		var stdElements = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p','blockquote'];
+		var stdElements = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p','blockquote', 'code', 'pre'];
 
 		for ( var i = 0 , elem ; elem = stdElements[i] ; i++ ) {
 			this[elem] = new NWTStdHtmlElementWrapper(elem);

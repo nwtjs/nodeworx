@@ -46,14 +46,25 @@
 	 */
 	NWTLayout.prototype._loadView = function(resource, params) {
 
-		if( params ) {
-			this.params = params;
-		}
-
 		var viewContent = fs.readFileSync(global.context().siteRoot + resource[0] + '/' + resource[1] + '.js');
 
 		// Trigger the toString() method
 		viewContent += '';
+
+		return this._loadFromContent(viewContent, params);
+	}
+
+
+	/**
+	 * Loads the NWTLayout class from view content
+	 * @param string View content
+	 * @param object Params object to store
+	 */
+	NWTLayout.prototype._loadFromContent = function(viewContent, params) {
+
+		if( params ) {
+			this.params = params;
+		}
 
 		// Load dynamic libraries
 		// TODO: Add caching
