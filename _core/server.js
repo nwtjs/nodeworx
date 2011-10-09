@@ -165,21 +165,25 @@ console.log('Resetting context!');
 					function processPostParams(data) {
 						var newData = {},
 							i;
-
+					
 						for( i in data ) {
 							if( i.indexOf('[')!== -1 ) {
 								// Special case, make recursive call
 								var matchKeys = /([a-zA-Z0-9]*)(?:\[([a-zA-Z0-9\[\[]*)\])?/gi.exec(i),
 									child = {};
-
+								
 								child[matchKeys[2]] = data[i];
 
-								newData[matchKeys[1]] = processPostParams(child);
+								var subData = processPostParams(child);
+								if( !newData[matchKeys[1]]  ) {
+									newData[matchKeys[1]] = {};
+								}
+
+								for (var member in subData) { newData[matchKeys[1]][member] = subData[member]; }
 							} else {
 								newData[i] = data[i].replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 							}
 						}
-
 						return newData;
 					}
 				
