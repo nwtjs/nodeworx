@@ -43,8 +43,10 @@ function getServer() {
 
 	Fiber(function(){
 		var hostName = request.headers.host,
-			hostName = hostName.replace(/^www\./, ''),
+			hostName = hostName.replace(/^www\./, '').replace(/[:0-9]*$/, ''),
 			definition = connections.connections[hostName];
+
+		console.log('Host request for: ' + hostName);
 
 		if( !definition ) {
 			definition = connections.connections.example;
