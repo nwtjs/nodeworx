@@ -217,3 +217,13 @@ console.log('Resetting context!');
 };
 
 getServer();
+
+
+/**
+ * Log all uncaught excpetions
+ */
+process.on('uncaughtException', function(err) {
+	console.log('===== UNCAUGHT EXCEPTION =====');
+	console.log(err);
+	console.log('===== END EXCEPTION CATCH =====');
+});
