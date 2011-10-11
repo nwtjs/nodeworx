@@ -131,7 +131,7 @@
 		var content = [];
 
 		for( var i = 0, script ; script = global.context().clientScripts[i] ; i++ ) {
-			content.push('<script id="' + script.replace('/', '-') + '" type="text/javascript" src="/_core/clientjs/' + script + '.js"></script>');			
+			content.push('<script id="' + script.replace('/', '-') + '" type="text/javascript" src="' + this._getClientScriptPath(script) + '"></script>');			
 		}
 
 		return content.join('');
@@ -145,11 +145,25 @@
                 var scripts = {};
 
                 for( var i = 0, script ; script = global.context().clientScripts[i] ; i++ ) {
-                       scripts[script.replace('/', '-')] = '/_core/clientjs/' + script + '.js';
+                       scripts[script.replace('/', '-')] = this._getClientScriptPath(script);
                 }
 
                 return scripts;
 
+	};
+
+
+	/**
+	 * Generates the path of a client script
+	 * Generally we want a script inside _core/clientjs, except for models
+	 * If it's a model, load it out of the app path
+	 */
+	NWTLayout.prototype._getClientScriptPath = function(path) {
+		if( path.indexOf('/') === 0 || path.indexOf('models') === 0 ) {
+			return path + '.js';
+		} else {
+			return'/_core/clientjs/' + path + '.js';
+		}
 	};
 
 	/**

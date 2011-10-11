@@ -86,7 +86,7 @@ function getServer() {
 			try {
 				var contextObject = {
 					// Default the client scripts
-					clientScripts : ['external/sizzle', 'common/NWTBase', 'common/NWTEventManager', 'common/NWTEventWrapper', 'common/NWTNode', 'common/NWTSocket', 'common/NWTDispatcher'],
+					clientScripts : ['external/sizzle', 'common/NWTBase', '/_core/libraries/SharedUtils', 'common/NWTEventManager', 'common/NWTEventWrapper', 'common/NWTNode', 'common/NWTSocket', 'common/NWTDispatcher', '/_core/libraries/NWTHelperInstance', '/_core/models/NWTModel' ],
 					config : definition,
 					request: {
 						controller: controller,

@@ -1,4 +1,3 @@
-
 (function(root) {
 
 	var nwtHelperInstance = global.nwt.load().library('NWTHelperInstance', false);
@@ -34,7 +33,12 @@
 		this.params = {};
 
 		// Set the offset from the request params
-		this.params.offset = global.context().request.params.offset || 0;
+		try {
+			this.params.offset = global.context().request.params.offset || 0;
+		} catch(e){
+			this.params.offset = 0;
+		}
+
 		if( this.params.offset < 0 ) {
 			this.params.offset = 0;
 		}

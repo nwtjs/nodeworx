@@ -58,7 +58,7 @@ NWTNodeInstance.prototype.addClass = function(className) {
  * Removes a class from the node.
  */
 NWTNodeInstance.prototype.removeClass = function(className) {
-	this._node.className.replace(className, '');
+	this._node.className = this._node.className.replace(className, '');
 };
 
 
@@ -211,6 +211,19 @@ NWTNodeInstance.prototype.all = function(selector) {
 
 
 /**
+ * Appends a node instance to this node
+ */
+NWTNodeInstance.prototype.append = function(node) {
+
+	if( node instanceof NWTNodeInstance ) {
+		node = node._node;
+	}
+
+	this._node.appendChild(node);
+};
+
+
+/**
  * Removes a node instance from the dom
  */
 NWTNodeInstance.prototype.remove = function() {
@@ -240,6 +253,25 @@ function NWTNodeList(nodes) {
 		wrappedNodes.push(new NWTNodeInstance(node));
 	}  
 	this.nodes = wrappedNodes;
+
+	var iteratedFunctions = [
+		'remove', 'addClass', 'removeClass'
+	],
+
+	mythis = this;
+
+	function getIteratedCallback(method) {
+		return function() {
+			console.log(method, 'called', mythis.nodes);
+			for( var j = 0 , node ; node = mythis.nodes[j] ; j++ ) {
+				node[method].apply(node, arguments);
+			}
+		};		
+	};
+
+	for( var i = 0, func; func = iteratedFunctions[i] ; i++ ) {
+		this[func] = getIteratedCallback(func);
+	}
 }
 
 
@@ -271,6 +303,19 @@ NWTNodeList.prototype.item = function(offset) {
 function NWTNode() {
 	
 }
+
+
+/**
+ * Creates a node from markup
+ * @param string Node markup
+ */
+NWTNode.prototype.create = function(markup) {
+
+	var container = document.createElement('div');
+	container.innerHTML = markup;
+
+	return new NWTNodeInstance(container.childNodes[0]);
+};
 
 
 /**

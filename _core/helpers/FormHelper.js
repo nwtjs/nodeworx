@@ -235,7 +235,14 @@
 	 * @param object Model which extends NWTModel
 	 */
 	FormHelper.prototype.utilize = function(model) {
-		this._model = model;
+		if( typeof model === 'string' ) {
+			this._model = global.nwt.load().model(model + 'Model');
+		} else {
+			this._model = model;
+		}
+
+		global.context().clientScripts.push('models/' + global.nwt.getClass(this._model));
+
 		return this;
 	};
 
