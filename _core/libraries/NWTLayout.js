@@ -34,8 +34,10 @@
 	 * @param array Resource locator e.g., [viewFolder, view]
 	 */
 	NWTLayout.prototype.partial = function(path) {
-		this._loadView(path, {layout: 'none'});
-		return this + '';
+
+		var subPartial = new NWTLayout();
+		subPartial._loadView(path, {layout: 'none'});
+		return subPartial;
 	};
 
 
@@ -132,6 +134,13 @@
 
 		for( var i = 0, script ; script = global.context().clientScripts[i] ; i++ ) {
 			content.push('<script id="' + script.replace('/', '-') + '" type="text/javascript" src="' + this._getClientScriptPath(script) + '"></script>');			
+		}
+
+		// Now handle manually requested scripts
+		if( this.definition.js ) {
+			for( var i = 0, script ; script = this.definition.js[i] ; i++ ) {
+				content.push('<script id="' + script.replace('/', '-') + '" type="text/javascript" src="/' + script + '"></script>');			
+			}	
 		}
 
 		return content.join('');

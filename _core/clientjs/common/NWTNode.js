@@ -102,6 +102,22 @@ NWTNodeInstance.prototype.set = function(property, value) {
 
 
 /**
+ * Sets a style attribute
+ * @param string Style attribute to set
+ * @param string Value to set
+ */
+NWTNodeInstance.prototype.setStyle = function(property, value) {
+
+	var newStyle = this._node.getAttribute('style').replace(new RegExp(property + ':[a-zA-Z0-9\-]*;'), '');
+
+	newStyle += property + ':' + value + ';';
+
+	this._node.setAttribute('style', newStyle);
+	return this;
+};
+
+
+/**
  * Adds an event listener tot he node
  * @param string Event to listen for
  * @param function Event callback function
@@ -185,6 +201,24 @@ NWTNodeInstance.prototype.setContent = function(content) {
 		nwt.event.implement(event);
 		eventBlock.remove();
 	});
+};
+
+
+/**
+ * Returns the next node
+ */
+NWTNodeInstance.prototype.next = function() {
+	var node = this._node.nextSibling;
+	return new NWTNodeInstance(node);
+};
+
+
+/**
+ * Returns the previous node
+ */
+NWTNodeInstance.prototype.previous = function() {
+	var node = this._node.previousSibling;
+	return new NWTNodeInstance(node);
 };
 
 
@@ -292,6 +326,15 @@ NWTNodeList.prototype.each = function(callback) {
  */
 NWTNodeList.prototype.item = function(offset) {
 	return this.nodes[offset];
+}
+
+
+/**
+ * Returns the size of the current nodelist
+ * @return integer
+ */
+NWTNodeList.prototype.size = function() {
+	return this.nodes.length;
 }
 
 
