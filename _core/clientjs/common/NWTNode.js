@@ -102,11 +102,31 @@ NWTNodeInstance.prototype.set = function(property, value) {
 
 
 /**
+ * Gets a style attribute set on the node
+ * @param string Style attribute to get
+ */
+NWTNodeInstance.prototype.getStyle = function(property) {
+
+	if( !this._node.getAttribute('style') ) {
+		return '';
+	}
+
+	var matchedStyle = this._node.getAttribute('style').match(new RegExp(property + ':([a-zA-Z0-9\-]*);'), '');
+
+	return matchedStyle[1];
+};
+
+
+/**
  * Sets a style attribute
  * @param string Style attribute to set
  * @param string Value to set
  */
 NWTNodeInstance.prototype.setStyle = function(property, value) {
+
+	if( !this._node.getAttribute('style') ) {
+		this._node.setAttribute('style', '');
+	}
 
 	var newStyle = this._node.getAttribute('style').replace(new RegExp(property + ':[a-zA-Z0-9\-]*;'), '');
 

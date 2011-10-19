@@ -7,7 +7,8 @@ function NWTLayoutManager() {
  */
 NWTLayoutManager.prototype.trapEvent = function(el) {
 
-	if( !el || !el.get('href') ) { return; }
+	// Make sure we have a valid href, try to filter out enpty hrefs, or hrefs that only have /#/
+	if( !el || !el.get('href') || /[a-zA-Z0-9]*$/.test(el.get('href')) ) { return; }
 
 	var resource = el.get('href'),
 		layoutWrapper = el.ancestor('.nwt_layout'),
