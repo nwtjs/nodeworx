@@ -78,7 +78,7 @@
 			content.push('</li>');
 		}
 
-		return '<ul>' + content.join('') + '</ul>';
+		return '<ul ' + this._parseAttributes() + '>' + content.join('') + '</ul>';
 	};
 
 

@@ -13,6 +13,9 @@
 		// Generic content display hook. Displays after generated content
 		// This should display inside of any helper wrapper tag
 		this.afterContent = '';
+
+		// List of plugns to render before rendering the content
+		this.plugins = [];
 	}
 
 
@@ -26,6 +29,18 @@
 
 		if( this._events !== undefined ) {
 			meta = '<script type="text/javascript" class="event_hooks">' + JSON.stringify(this._events) + '</script>';
+		}
+
+		// Run any plugins
+		if( this.plugins  )
+		for( var i = 0, plugin ; plugin = this.plugins[i] ; i++  ) {
+			// Create a plugin class and push the configuration into it
+			var pluginName = plugin[0] + 'Plugin';
+			var pluginClass = require(__dirname + '/../plugins/' + pluginName + '.js');
+			pluginClass = new pluginClass[pluginName](plugin[1]);
+
+			console.log('plugin class', __dirname + '/../plugins/' + pluginName + '.js', pluginClass);
+			pluginClass.process(this);
 		}
 
 		return meta + this.render();
@@ -92,6 +107,17 @@
 		return this;
 	};
 
+
+	/**
+	 * Creates a plugin instance which can modify this helper
+	 */
+	NWTHelperInstance.prototype.plug = function(plugin, args) {
+console.log('about to push plugin');
+		this.plugins.push([plugin, args]);
+
+console.log('Pushing plugin', this.plugins);
+		return this;
+	};
 
 	root.NWTHelperInstance = NWTHelperInstance;
 

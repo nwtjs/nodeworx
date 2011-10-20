@@ -13,6 +13,8 @@ function NWTEventManager() {
  */
 NWTEventManager.prototype.implement = function(eventSpecs, doNotReset) {
 
+	console.log('Implementing event', eventSpecs);
+
 	for( var i = 0 , eventSpec ; eventSpec = eventSpecs[i] ; i++ ) {
 
 		// I'm fairly certain that we can just remove this and always reset the events
@@ -36,6 +38,11 @@ NWTEventManager.prototype.implement = function(eventSpecs, doNotReset) {
  * Calls all event listeners on the event
  */
 NWTEventManager.prototype.fire = function(event, args) {
+
+	console.log('Firing event', event);
+
+	console.log(this.events);
+
 	if( this.events[event] === undefined ) { return; }
 
 	for( var i = 0 , callback ; callback = this.events[event][i] ; i++ ) {

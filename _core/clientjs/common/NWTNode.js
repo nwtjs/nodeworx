@@ -286,6 +286,20 @@ NWTNodeInstance.prototype.remove = function() {
 
 
 /**
+ * Inserts a given node into this node at the proper position
+ */
+NWTNodeInstance.prototype.insert = function(node, position) {
+	position = position || 'before';
+
+	if( position == 'before'  ) {
+		this._node.parentNode.insertBefore(node._node, this._node);
+	} else if ( position == 'after' ) {
+		this._node.parentNode.insertBefore(node._node, this.next()._node);
+	}
+};
+
+
+/**
  * Simulates a click event on a node
  */
 NWTNodeInstance.prototype.click = function() {
