@@ -89,6 +89,14 @@
 		if( !context.clientScripts) {
 			context.clientScripts = [];
 		}
+
+		// Loop through the current required scripts to make sure we only include it once
+		for( var i = 0, clientScript; clientScript = context.clientScripts[i] ; i++ ) {
+			if( script == clientScript ) {
+				return;
+			}
+		}
+
 		context.clientScripts.push(script);
 	};
 

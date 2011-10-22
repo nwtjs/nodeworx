@@ -44,7 +44,11 @@
 	 * Renders the HtmlLink object
 	 */
 	HtmlLink.prototype.render = function() {
-		return '<a href="' + this.get('href') + '" ' + this._parseAttributes() + '>' + this.get('content') + '</a>';
+		return this.beforeContent +
+		'<a href="' + this.get('href') + '" ' + this._parseAttributes() + '>' + 
+			this.get('content') +
+		'</a>' +
+		this.afterContent;
 	};
 
 
@@ -74,7 +78,7 @@
 
 		for( var i = 0, item ; item = items[i] ; i++ ) {
 			content.push('<li>');
-				content.push(item);
+				content.push(item + '');
 			content.push('</li>');
 		}
 
