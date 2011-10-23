@@ -45,6 +45,10 @@ NWTFlyoutMenu.prototype.close = function() {
  * Opens the menu
  */
 NWTFlyoutMenu.prototype.open = function() {
+	if( this.currentMenu && this.currentMenu !== this.trigger.next() ) {
+		this.close();
+	}
+
 	this.currentMenu = this.trigger.next();
 
 	this.currentMenu.setStyle('display', 'block');

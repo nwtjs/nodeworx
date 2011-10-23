@@ -24,7 +24,7 @@
 		viewObject.after(
 			htmlHelper.div(
 				htmlHelper.list.apply(null, this.menuItems),
-				{style: 'display:none;'}
+				{style: 'display:none;', class: 'nwt_flyout_list'}
 			)
 		);
 
