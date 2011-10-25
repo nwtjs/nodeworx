@@ -15,7 +15,7 @@
 
 		// Default any styles
 		config.pos = config.pos || [0,0];
-		config.width = config.width || 'auto';
+		config.width = config.width || (config.centered ? 400 : 'auto');
 
 		this.config = config;
 	}
@@ -34,7 +34,17 @@
 		styles.push('top:' + this.config.pos[1] + 'px;');
 		styles.push('width:' + this.config.width + 'px;');
 
-		var style = 'style="' + styles.join('') + '"',
+		var extraClass = "";
+		if( this.config.centered ) {
+			extraClass = ' nwt_panel_centered';
+			styles.push('position:absolute;');
+			styles.push('left:50%;');
+			styles.push('top:50%;');
+			styles.push('margin-left:-' + (this.config.width/2) + 'px;');
+			styles.push('margin-top:-200px;');
+		}
+
+		var style = 'style="' + styles.join('') + '" ',
 
 		title = '';
 
@@ -43,7 +53,7 @@
 		}
 
 		var content = [
-			'<div class="panel" ', style , '>',
+			'<div class="panel', extraClass, '" ', style, '>',
 				'<div class="panel_top">', title , '</div>',
 				'<div class="panel_inner">',
 					this.content + '',

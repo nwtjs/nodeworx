@@ -20,4 +20,12 @@ NWTPanel.prototype.ajax = function(el) {
 	});
 };
 
+
+/**
+ * Closes a panel which is an ancestor of a provided element
+ */
+NWTPanel.prototype.closeParentPanel = function(el) {
+	el.ancestor('.panel').remove();
+};
+
 nwt.panel = new NWTPanel();

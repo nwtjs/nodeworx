@@ -151,14 +151,20 @@
 	 * Generates an object of required scripts
 	 */
 	NWTLayout.prototype._generateScripts = function() {
-                var scripts = {};
+		var scripts = {};
+		
+		for( var i = 0, script ; script = global.context().clientScripts[i] ; i++ ) {
+			   scripts[script.replace('/', '-')] = this._getClientScriptPath(script);
+		}
 
-                for( var i = 0, script ; script = global.context().clientScripts[i] ; i++ ) {
-                       scripts[script.replace('/', '-')] = this._getClientScriptPath(script);
-                }
+		// Now handle manually requested scripts
+		if( this.definition.js ) {
+			for( var i = 0, script ; script = this.definition.js[i] ; i++ ) {
+			   scripts[script.replace('/', '-')] = '/' + script;
+			}	
+		}
 
-                return scripts;
-
+		return scripts;
 	};
 
 
