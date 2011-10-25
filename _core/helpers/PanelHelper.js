@@ -72,5 +72,24 @@
 	};
 
 
+	/**
+	 * Returns a link which renders a panel loaded
+	 * via ajax when clicked
+	 * @param string Link title
+	 * @param resource
+	 */
+	PanelHelper.prototype.ajax = function(linkContent, ajaxResource) {
+		var htmlHelper = global.nwt.load().helper('Html');
+
+		global.nwt.requireScript('widgets/Panel');
+
+		if( !(ajaxResource instanceof String) ) {
+			ajaxResource = ajaxResource.join('/');
+		}
+
+		return htmlHelper.link(linkContent, '#', {class: 'nwt_panel_ajax', 'data-resource' : ajaxResource });
+	};
+
+
 	root.PanelHelper = PanelHelper;
 }(this));

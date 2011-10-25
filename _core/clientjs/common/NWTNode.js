@@ -113,7 +113,11 @@ NWTNodeInstance.prototype.getStyle = function(property) {
 
 	var matchedStyle = this._node.getAttribute('style').match(new RegExp(property + ':([a-zA-Z0-9\-]*);'), '');
 
-	return matchedStyle[1];
+	if( matchedStyle && matchedStyle[1] ) {
+		return matchedStyle[1];
+	} else {
+		return null;
+	}
 };
 
 

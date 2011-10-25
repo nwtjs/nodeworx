@@ -7,6 +7,14 @@ function NWTForm() {
 
 NWTForm.prototype.submit = function(el) {
 
+	// Fire the submit call, see if anything wants to trap it
+	try {
+		nwt.event.fire('FormHelper:submit', el);
+	} catch(e) {
+		// If there was an exception thrown when trying to submit, do not submit
+		return;
+	}
+
 	// Get a 'utilized' model if there is one available, and check for active client-side validation rules
 	var modelName = el.get('action').match(/([a-zA-Z]+)$/);
 
