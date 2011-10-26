@@ -1,14 +1,15 @@
 {
 	"name": "nwt",
-	"version": "0.0.10",
+	"version": "0.0.11",
 	"description": "Node Web Toolkit - A drastic departure from standard web application frameworks.",
 	"keywords": ["nwt"],
 	"homepage": "http://nwtjs.org",
 	"author": "Kevin Grandon <kevingrandon@yahoo.com> (https://github.com/KevinGrandon/)",
 	"dependencies": {
-	    "fibers": "0.6.1",
-	    "mysql": "0.9.4",
-            "mongodb" : "0.9.6-20"
+		"fibers": "0.6.1",
+		"mysql": "0.9.4",
+		"mongodb" : "0.9.6-20",
+		"uglify-js" : "1.1.1"
 	},
 	"main": "nwt",
 	"repository": {

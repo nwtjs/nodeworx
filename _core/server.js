@@ -13,6 +13,7 @@ var mimeTypes = {
     "jpg": "image/jpeg",
     "png": "image/png",
     "js": "text/javascript",
+    "min": "text/javascript",
     "css": "text/css"};
 
 function getServer() {
@@ -53,7 +54,7 @@ function getServer() {
 		}
 
 		var pathname = url.parse(request.url).pathname,
-			filename = './' + (pathname.indexOf('_core') === -1 ? definition.folder  : '' ) + pathname;
+			filename = './' + (pathname.indexOf('cache/') === -1 && pathname.indexOf('_core') === -1 ? definition.folder  : '' ) + pathname;
 			reqParts = pathname.substring(1).split('/'),
 			controller = reqParts[0].length > 0 && reqParts[0].length > 0 ? reqParts[0] : 'index',
 			action = reqParts[1] && reqParts[1].length > 0 && reqParts[1].length > 0 ? reqParts[1] : 'index',
@@ -67,7 +68,15 @@ function getServer() {
 			path.exists(filename, function(exists) {
 				if( exists ) {
 
-					var mimeType = mimeTypes[path.extname(filename).split(".")[1]];
+					var extension = path.extname(filename).split(".")[1];
+
+					// Do NOT allow direct access to javascript files, we only serve up whitelisted minified versions
+					if( extension == 'js' ) {
+						console.log('Unallowed script accessto: ', filename);
+						response.end();
+					}
+
+					var mimeType = mimeTypes[extension];
 					response.writeHead(200, {'Content-Type':mimeType});
 
 					var fileStream = fs.createReadStream(filename);

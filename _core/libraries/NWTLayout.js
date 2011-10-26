@@ -1,6 +1,7 @@
 (function(root) {
 
-	var fs = require('fs');
+	var fs = require('fs'),
+		path = require('path');
 
 	/**
 	 * Layout class
@@ -133,13 +134,13 @@
 		var content = [];
 
 		for( var i = 0, script ; script = global.context().clientScripts[i] ; i++ ) {
-			content.push('<script id="' + script.replace('/', '-') + '" type="text/javascript" src="' + this._getClientScriptPath(script) + '"></script>');			
+			content.push('<script id="' + script.replace(/\//g, '-') + '" type="text/javascript" src="' + this._getClientScriptPath(script) + '"></script>');			
 		}
 
 		// Now handle manually requested scripts
 		if( this.definition.js ) {
 			for( var i = 0, script ; script = this.definition.js[i] ; i++ ) {
-				content.push('<script id="' + script.replace('/', '-') + '" type="text/javascript" src="/' + script + '"></script>');			
+				content.push('<script id="' + script.replace(/\//g, '-') + '" type="text/javascript" src="' + this._getManualScriptPath('/' + script) + '"></script>');			
 			}	
 		}
 
@@ -154,17 +155,51 @@
 		var scripts = {};
 		
 		for( var i = 0, script ; script = global.context().clientScripts[i] ; i++ ) {
-			   scripts[script.replace('/', '-')] = this._getClientScriptPath(script);
+			   scripts[script.replace(/\//g, '-')] = this._getClientScriptPath(script);
 		}
 
 		// Now handle manually requested scripts
 		if( this.definition.js ) {
 			for( var i = 0, script ; script = this.definition.js[i] ; i++ ) {
-			   scripts[script.replace('/', '-')] = '/' + script;
+			   scripts[script.replace(/\//g, '-')] = this._getManualScriptPath('/' + script);
 			}	
 		}
 
 		return scripts;
+	};
+
+
+	/**
+	 * Returns the minified and obsfuscicated path to the javascript file
+	 * We need to save the file as .txt or some other format than .js because we do not allow loading of js files
+	 */
+	NWTLayout.prototype._getMinifiedPath = function(filepath) {
+
+		filepath = (filepath.indexOf('_core') === -1 ? '/' + global.context().config.folder : '' ) + filepath;
+
+		var fileStat = fs.statSync(__dirname + '/../..' + filepath);
+
+		var minifiedPath = '/cache/' + global.context().config.folder + '_' + new Date(fileStat.mtime).getTime() + '_' + filepath.replace(/\//g, '_') + '.min',
+
+		systemCachePath = __dirname + '/../..' + minifiedPath;
+
+		//console.log('Path are: ', filepath, minifiedPath);
+
+		if( !path.existsSync(systemCachePath) ) {
+
+			var jsp = require("uglify-js").parser;
+			var pro = require("uglify-js").uglify;
+
+			var orig_code =  fs.readFileSync(__dirname + '/../..' + filepath) + '';
+			var ast = jsp.parse(orig_code); // parse code and get the initial AST
+			ast = pro.ast_mangle(ast); // get a new AST with mangled names
+			ast = pro.ast_squeeze(ast); // get an AST with compression optimizations
+			var finalCode = pro.gen_code(ast); // compressed code here
+
+			fs.writeFileSync(systemCachePath, finalCode);
+		}
+
+		return minifiedPath;
 	};
 
 
@@ -175,10 +210,22 @@
 	 */
 	NWTLayout.prototype._getClientScriptPath = function(path) {
 		if( path.indexOf('/') === 0 || path.indexOf('models') === 0 ) {
-			return path + '.js';
+			if( path.indexOf('/') !== 0 ) {
+				path = '/' + path;
+			}
+			return this._getMinifiedPath(path + '.js');
 		} else {
-			return'/_core/clientjs/' + path + '.js';
+			return this._getMinifiedPath('/_core/clientjs/' + path + '.js');
 		}
+	};
+
+
+
+	/**
+	 * Generates the path of a manually included script
+	 */
+	NWTLayout.prototype._getManualScriptPath = function(path) {
+		return this._getMinifiedPath(path);
 	};
 
 	/**

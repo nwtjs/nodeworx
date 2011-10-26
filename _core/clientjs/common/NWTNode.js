@@ -51,6 +51,7 @@ NWTNodeInstance.prototype.addClass = function(className) {
 	if( !this.hasClass(className)  ) {
 		this._node.className = this._node.className +  ' ' + className;
 	}
+	return this;
 };
 
 
@@ -59,6 +60,7 @@ NWTNodeInstance.prototype.addClass = function(className) {
  */
 NWTNodeInstance.prototype.removeClass = function(className) {
 	this._node.className = this._node.className.replace(className, '');
+	return this;
 };
 
 
