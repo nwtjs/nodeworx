@@ -83,6 +83,18 @@
 
 
 	/**
+	 * Renders a close link for the panel
+	 */
+	PanelHelper.prototype.closeLink = function(linkText) {
+		linkText = linkText || 'Close';
+
+		var Html = global.nwt.load().helper('Html');
+
+		return Html.link(linkText, '#', {class: 'nwt_panel_closeParentPanel'});
+	};
+
+
+	/**
 	 * Returns a link which renders a panel loaded
 	 * via ajax when clicked
 	 * @param string Link title
