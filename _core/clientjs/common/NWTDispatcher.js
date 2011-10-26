@@ -55,7 +55,9 @@ NWTDispatcher.prototype.getDispatcher = function(entryPoint, entryPointClass) {
 			e.stop();
 
 			callback = entryPointClass;	
+
 			callback = callback[target.data('callback')].trapEvent;
+
 			callback(intendedTarget);
 			handlerFound = true;
 			break;

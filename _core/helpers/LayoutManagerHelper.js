@@ -65,9 +65,9 @@
 		}
 
 		// If the content is a string, or has a render method, set an object.
-		if( typeof args === "string" || args.render !== undefined ) {
-			args = {content: args};
-		}
+//		if( typeof args === "string" || args.render !== undefined ) {
+			args = {content: args + ''};
+//		}
 		var definition = args;
 
         	this.panels[position] = definition;

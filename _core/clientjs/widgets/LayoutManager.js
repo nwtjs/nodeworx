@@ -8,7 +8,8 @@ function NWTLayoutManager() {
 NWTLayoutManager.prototype.trapEvent = function(el) {
 
 	// Make sure we have a valid href, try to filter out enpty hrefs, or hrefs that only have /#/
-	if( !el || !el.get('href') || /[a-zA-Z0-9]*$/.test(el.get('href')) ) { return; }
+	// Trap any link for now, links with target_="blank" will open in a new window
+	//if( !el || !el.get('href') || /[a-zA-Z0-9]*$/.test(el.get('href')) ) { return; }
 
 	var resource = el.get('href'),
 		layoutWrapper = el.ancestor('.nwt_layout'),
