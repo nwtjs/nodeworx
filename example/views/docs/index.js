@@ -19,7 +19,14 @@
 				Html.link('Number Helper', '/docs/helpers_number'),
 				Html.link('TabView Helper', '/docs/helpers_tabview'),
 				Html.link('LayoutManager Helper', '/docs/helpers_layoutmanager'),
+				Html.link('Panel Helper', '/docs/helpers_panel'),
+				Html.link('Paginator Helper', '/docs/helpers_paginator'),
 				Html.link('Table Helper', '/docs/helpers_table')
+			),
+			Html.link('Models', '/docs/models'),
+			Html.link('NWT Client Libs', '/docs/uijs'),
+			Html.list(
+				Html.link('Client Node', '/docs/uijs_node')
 			)
 		))
 		.main('Welcome to the NWT docs') +
