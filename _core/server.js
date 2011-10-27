@@ -89,8 +89,7 @@ function getServer() {
 			});
 		
 		} else {
-			response.writeHead(200, {"Content-Type": "text/html"});
-	
+
 			// Require the controller for the application we've requested
 			try {
 				var contextObject = {
@@ -105,7 +104,7 @@ function getServer() {
 						waitFor: waitFor
 					}
 				};
-console.log('Resetting context!');
+
 				global.context = function() {
 					return contextObject;
 				};
@@ -154,14 +153,26 @@ console.log('Resetting context!');
 					Fiber(function(){
 						NWTLayout._loadView([controller, action], params);
 
-						content = NWTLayout + '';
+						if( NWTLayout.definition && NWTLayout.definition.responseCallback !== undefined ) {
+
+							// Views may implement a custom response handler
+							// If they do, make the callback
+							// See _core/private/proxy_pass for an example
+							NWTLayout.definition.responseCallback(response, params);
+
+						} else {
+							// Append empty string to always trigger the toString method
+							content = NWTLayout + '';
+
+							// Return content like we usually do
+							response.writeHead(200, {"Content-Type": "text/html"});
+
+							response.end(content + '');
+						}
 
 						// Reset the context holder
-	                                        console.log('Resetting contextObject after fiber.');
-	                                        contextObject = {};
-
-        	                                // Append empty string to always trigger the toString method
-                	                        response.end(content + '');
+						console.log('Resetting contextObject after fiber.');
+						contextObject = {};
 
 					}).run();
 				};
