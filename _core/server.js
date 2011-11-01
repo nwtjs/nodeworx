@@ -1,10 +1,10 @@
-var connections = require('./../config.connections.js'),
+var connections = global.connections,
 url = require('url'),
 nwt = require('./libraries/nwt.js'),
 fs = require('fs'),
 http = require('http'),
 path = require('path');
-
+console.log('Connections are', connections);
 require('fibers');
 
 var mimeTypes = {
@@ -45,20 +45,29 @@ function getServer() {
 	Fiber(function(){
 		var hostName = request.headers.host,
 			hostName = hostName.replace(/^www\./, '').replace(/[:0-9]*$/, ''),
-			definition = connections.connections[hostName];
+			definition = connections[hostName],
+			siteRoot;
 
 		console.log('Host request for: ' + hostName);
 
 		if( !definition ) {
-			definition = connections.connections.example;
+			definition = connections.example;
+			siteRoot =  __dirname  + '/../' + definition.folder + '/views/';
+		} else {
+			siteRoot =  __dirname  + '/../../../' + definition.folder + '/views/';
 		}
 
 		var pathname = url.parse(request.url).pathname,
-			filename = './' + (pathname.indexOf('cache/') === -1 && pathname.indexOf('_core') === -1 ? definition.folder  : '' ) + pathname;
+			filename = siteRoot + '../..' + pathname;
 			reqParts = pathname.substring(1).split('/'),
 			controller = reqParts[0].length > 0 && reqParts[0].length > 0 ? reqParts[0] : 'index',
 			action = reqParts[1] && reqParts[1].length > 0 && reqParts[1].length > 0 ? reqParts[1] : 'index',
 			content = '';
+
+		// Special lookup for cache requests (hit the nwt folder)
+		if ( pathname.indexOf('cache/') === -1 && pathname.indexOf('_core') === -1 ) {
+			filename = siteRoot + '../' + pathname;
+		}
 
 		console.log('Request for: ' , filename);
 		// If it's a request for a whitelisted file type, stream it
@@ -112,7 +121,7 @@ function getServer() {
 				// Handle special _nwt requests
 				// This calls an internal entrypoint to handle a private request
 				// E.g., _nwt/model_updater/model/ChatModel
-				global.context().siteRoot = __dirname  + '/../' + definition.folder + '/views/';
+				global.context().siteRoot = siteRoot;
 				var layoutOverride = false;
 
 				if( pathname.indexOf('_nwt') !== -1  ) {
@@ -234,8 +243,8 @@ function getServer() {
 	}).run(); // End Fiber() wrap
 	});
 	
-	server.listen(connections.port);
-	console.log("Server running on port: " + connections.port);
+	server.listen(global.port);
+	console.log("Server running on port: " + global.port);
 };
 
 getServer();
