@@ -52,13 +52,14 @@ function getServer() {
 
 		if( !definition ) {
 			definition = connections.example;
-			siteRoot =  __dirname  + '/../' + definition.folder + '/views/';
+			siteRoot =  __dirname  + '/../' + definition.folder;
 		} else {
-			siteRoot =  __dirname  + '/../../../' + definition.folder + '/views/';
+			siteRoot =  __dirname  + '/../../../' + definition.folder;
 		}
 
+
 		var pathname = url.parse(request.url).pathname,
-			filename = siteRoot + '../..' + pathname;
+			filename = __dirname + '/..' + pathname;
 			reqParts = pathname.substring(1).split('/'),
 			controller = reqParts[0].length > 0 && reqParts[0].length > 0 ? reqParts[0] : 'index',
 			action = reqParts[1] && reqParts[1].length > 0 && reqParts[1].length > 0 ? reqParts[1] : 'index',
@@ -66,10 +67,10 @@ function getServer() {
 
 		// Special lookup for cache requests (hit the nwt folder)
 		if ( pathname.indexOf('cache/') === -1 && pathname.indexOf('_core') === -1 ) {
-			filename = siteRoot + '../' + pathname;
+			filename = siteRoot + pathname;
 		}
 
-		console.log('Request for: ' , filename);
+		console.log('Request for: ' , filename, ' | Path: ', pathname);
 		// If it's a request for a whitelisted file type, stream it
 		if( /\.[a-zA-Z]+$/.test(filename) ) {
 
@@ -103,7 +104,18 @@ function getServer() {
 			try {
 				var contextObject = {
 					// Default the client scripts
-					clientScripts : ['external/sizzle', 'common/NWTBase', '/_core/libraries/SharedUtils', 'common/NWTEventManager', 'common/NWTEventWrapper', 'common/NWTNode', 'common/NWTSocket', 'common/NWTDispatcher', '/_core/libraries/NWTHelperInstance', '/_core/models/NWTModel' ],
+					clientScripts : [
+						'/_core/clientjs/external/sizzle',
+						'/_core/clientjs/common/NWTBase',
+						'/_core/libraries/SharedUtils',
+						'/_core/clientjs/common/NWTEventManager',
+						'/_core/clientjs/common/NWTEventWrapper',
+						'/_core/clientjs/common/NWTNode',
+						'/_core/clientjs/common/NWTSocket',
+						'/_core/clientjs/common/NWTDispatcher',
+						'/_core/libraries/NWTHelperInstance',
+						'/_core/models/NWTModel'
+					],
 					config : definition,
 					request: {
 						controller: controller,

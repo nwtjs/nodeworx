@@ -49,7 +49,7 @@
 	 */
 	NWTLayout.prototype._loadView = function(resource, params) {
 
-		var viewContent = fs.readFileSync(global.context().siteRoot + resource[0] + '/' + resource[1] + '.js');
+		var viewContent = fs.readFileSync(global.context().siteRoot + '/views/' + resource[0] + '/' + resource[1] + '.js');
 
 		// Trigger the toString() method
 		viewContent += '';
@@ -121,7 +121,7 @@
 				path = '/' + path;
 			}
 
-			stylesheetContent.push('<link rel="stylesheet"i type="text/css" href="' + path + '">');
+			stylesheetContent.push('<link rel="stylesheet" type="text/css" href="' + path + '">');
 		}
 		return stylesheetContent.join('');
 	};
@@ -175,22 +175,28 @@
 	 */
 	NWTLayout.prototype._getMinifiedPath = function(filepath) {
 
-		filepath = (filepath.indexOf('_core') === -1 ? '/' + global.context().config.folder : '' ) + filepath;
+		var fileStat;
 
-		var fileStat = fs.statSync(__dirname + '/../..' + filepath);
+		if( filepath.indexOf('_core') === -1 ) {
+			filepath = global.context().siteRoot + filepath;
+			fileStat = fs.statSync(filepath);
+		} else {
+			filepath = __dirname + '/../..' + filepath;
+			fileStat = fs.statSync(filepath);
+		}
 
 		var minifiedPath = '/cache/' + global.context().config.folder + '_' + new Date(fileStat.mtime).getTime() + '_' + filepath.replace(/\//g, '_') + '.min',
 
 		systemCachePath = __dirname + '/../..' + minifiedPath;
 
-		//console.log('Path are: ', filepath, minifiedPath);
+		//console.log('Path are: ', filepath, minifiedPath, systemCachePath);
 
 		if( !path.existsSync(systemCachePath) ) {
 
 			var jsp = require("uglify-js").parser;
 			var pro = require("uglify-js").uglify;
 
-			var orig_code =  fs.readFileSync(__dirname + '/../..' + filepath) + '';
+			var orig_code =  fs.readFileSync(filepath) + '';
 			var ast = jsp.parse(orig_code); // parse code and get the initial AST
 			ast = pro.ast_mangle(ast); // get a new AST with mangled names
 			ast = pro.ast_squeeze(ast); // get an AST with compression optimizations

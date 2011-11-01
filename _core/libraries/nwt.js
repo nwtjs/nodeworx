@@ -97,6 +97,10 @@
 			}
 		}
 
+		if( script.indexOf('/') !== 0 ) {
+			script = '/_core/clientjs/' + script;
+		}
+
 		context.clientScripts.push(script);
 	};
 
