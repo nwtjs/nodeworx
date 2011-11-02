@@ -116,6 +116,25 @@
 
 
 	/**
+	 * Runs a validation rule on a single method
+	 */
+	NWTValidation.prototype.validate = function(rule, value, definition) {
+		var method = '_validate_' + rule;
+
+		if( !(definition instanceof Object) ) {
+			definition = {value: definition};
+		}
+
+		try {
+			this[method](value, definition);
+		} catch(e) {
+			return false;
+		}
+		return true;
+	};
+
+
+	/**
 	 * Validates a provided value with a ruleset
 	 */
 	NWTValidation.prototype.validateProvidedValue = function(value, rules) {

@@ -10,7 +10,7 @@
 		// Before and after are handled by NWTHelperInstance
 		// So far, "betweenContent" is only used for forms
 		this.betweenContent = '';
-		
+		console.log('Form attributes', attributes);
 		this.key = attributes[0];
 		this.attributes = attributes[1] || {};
 
@@ -173,6 +173,8 @@
 			optionMarkup += '<option value="' + i + '"' + selectedMarkup + '>' + options[i] + '</option>';
 		}
 
+		delete this.attributes.options;
+
 		return '<select ' + this._parseAttributes() + '>' + optionMarkup + '</select>';
 	}
 
@@ -181,6 +183,7 @@
 	 * Renders a text input field
 	 */
 	FormField.prototype.render_text = function() {
+		delete this.attributes.type;
 		return '<input type="' + this.get('type') + '" value="' + this.get('value') + '" ' + this._parseAttributes() + '>';
 	}
 

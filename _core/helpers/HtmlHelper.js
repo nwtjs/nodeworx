@@ -23,7 +23,8 @@
 
 
 	NWTStdHtmlElement.prototype.render = function() {
-		return '<' + this.tag + ' ' + this._parseAttributes() + '>' + this.content + '</' + this.tag + '>';
+		var attributes = this._parseAttributes();
+		return '<' + this.tag + ( attributes ? ' ' + attributes : '' ) + '>' + this.content + '</' + this.tag + '>';
 	};
 
 
@@ -44,8 +45,11 @@
 	 * Renders the HtmlLink object
 	 */
 	HtmlLink.prototype.render = function() {
+
+		var attributes = this._parseAttributes();
+
 		return this.beforeContent +
-		'<a href="' + this.get('href') + '" ' + this._parseAttributes() + '>' + 
+		'<a href="' + this.get('href') + '"' + ( attributes ? ' ' + attributes : '' ) + '>' + 
 			this.get('content') +
 		'</a>' +
 		this.afterContent;
@@ -82,7 +86,9 @@
 			content.push('</li>');
 		}
 
-		return '<ul ' + this._parseAttributes() + '>' + content.join('') + '</ul>';
+		var attributes = this._parseAttributes();
+
+		return '<ul' + ( attributes ? ' ' + attributes : '' ) + '>' + content.join('') + '</ul>';
 	};
 
 
@@ -102,7 +108,10 @@
 	 * Renders the HtmlLink object
 	 */
 	HtmlImage.prototype.render = function() {
-		return '<img src="' + this.get('src') + '" ' + this._parseAttributes() + '>';
+
+		var attributes = this._parseAttributes();
+
+		return '<img src="' + this.get('src') + '"' + ( attributes ? ' ' + attributes : '' ) + '>';
 	};
 
 
