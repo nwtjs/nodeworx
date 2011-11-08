@@ -108,7 +108,7 @@
 
 		// If we do not have a client yet, instantiate one
 		if( !this._client ) {
-			var _clientConfig = require(__dirname + '/../../' + global.context().config.folder + '/config.js').db,
+			var _clientConfig = require(global.context().siteRoot + '/config.js').db,
 				driverClass = require(__dirname + '/../drivers/NWT' + _clientConfig.driver + '.js').client;
 			this._client = new driverClass(_clientConfig,  this);
 		}

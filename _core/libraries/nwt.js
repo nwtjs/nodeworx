@@ -37,14 +37,16 @@
 
 	NWTUtils.prototype.load = function() {
 
+		var path = require('path');
+
 		function NWTLoader() {}
 
 		NWTLoader.prototype.load = function(baseDir, className, instantiate) {
-			try {
-				//console.log('folder', global.context().config.folder);
-				//console.log('./../../' + global.context().config.folder + '/' + baseDir + '/' + className + '.js');
-				var classToLoad = require('./../../' + global.context().config.folder + '/' + baseDir + '/' + className + '.js')[className];
-			} catch(e) {
+			if( path.existsSync(global.context().siteRoot + '/' + baseDir + '/' + className + '.js') ) {
+//				console.log('folder', global.context().config.folder);
+//				console.log(global.context().siteRoot + '/' + baseDir + '/' + className + '.js');
+				var classToLoad = require(global.context().siteRoot + '/' + baseDir + '/' + className + '.js')[className];
+			} else {
 				var classToLoad = require('./../' + baseDir + '/' + className + '.js')[className];
 			}
 
