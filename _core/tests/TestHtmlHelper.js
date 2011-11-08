@@ -1,6 +1,6 @@
 var vows = require("vows"),
 	assert = require("assert"),
-	nwt = require('./../libraries/nwt.js');
+	nwt = require('./NWTTestBase.js');
 
 var htmlHelper = global.nwt.load().helper('Html');
 

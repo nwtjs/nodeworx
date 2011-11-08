@@ -1,14 +1,8 @@
 var vows = require("vows"),
 	assert = require("assert"),
-	nwt = require('./../libraries/nwt.js');
+	nwt = require('./NWTTestBase.js');
 
 var formHelper = global.nwt.load().helper('Form');
-
-// Make a context stub
-// TODO: Rip this out into a test utility
-global.context = function() {
-	return {clientScripts : []};
-};
 
 vows.describe('FormHelper').addBatch({
 	'FormHelper::generate': {
