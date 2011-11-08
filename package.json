@@ -12,7 +12,7 @@
 		"uglify-js" : "1.1.1"
 	},
 	"devDependencies" : {
-		"vows : "0.5.12"
+		"vows" : "0.5.12"
 	},
 	"main": "nwt",
 	"repository": {
