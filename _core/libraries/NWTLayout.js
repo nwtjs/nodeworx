@@ -133,6 +133,8 @@
 
 		var content = [];
 
+		content.push('<script src="/socket.io/socket.io.js"></script>');
+
 		for( var i = 0, script ; script = global.context().clientScripts[i] ; i++ ) {
 			content.push('<script id="' + script.replace(/\//g, '-') + '" type="text/javascript" src="' + this._getClientScriptPath(script) + '"></script>');			
 		}

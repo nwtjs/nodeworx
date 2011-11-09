@@ -17,25 +17,38 @@ function NWTSocketInstance(params) {
 
 	// Default some stuff
 	this.config.postData = this.config.postData || '';
-	this.config.failure = this.config.failure || function(){alert('fail');};
 
 	if( this.config.form !== undefined ) {
 		this.config.postData = this.config.form.serialize();
 	}
 
-	var request = new XMLHttpRequest();
+	var data = {
+		resource : this.resource
+	};
 
-	request.open("POST", this.resource, true);
-	//request.setRequestHeader('Content-type','application/x-www-form-urlencoded');
-	
-	request.onreadystatechange = function () {
-		if (request.readyState != 4) return;
-		if (request.status != 200 && request.status != 304) {
-			mythis.config.callback.failure();
-			return;
-		}
+	data.postData = this.config.postData;
+	nwt.socket.io.emit('socketRequest', data);
+}
 
-		var response = JSON.parse(request.responseText);
+
+/**
+ * Socket wrapper
+ * @constructor
+ */
+function NWTSocket() {
+
+	// Keeps track of which socket we are using
+	this.lastSocketId = 0;
+
+	// Mapping of callback to generated socket IDs
+	// This allows us to use sockets like standard ajax requests if desired
+	this.callbackMap = {};
+
+	this.io = window.io.connect('http://' + NWT_Config.host);
+
+	this.io.on('socketResponse', function(response) {
+
+		console.log('Got response', response);
 
 		// Handle special response keys
 		// Scripts are included if they don't exist in the dom
@@ -51,26 +64,15 @@ function NWTSocketInstance(params) {
 				}
 			}
 		}
-
+	
 		// Handle the pageTitle response key update
 		// Update the main title of the page
 		if( response.title !== undefined ) {
 			nwt.one('head title').setContent(response.title);
 		}
-
-		mythis.config.success(response);
-	}
-	if (request.readyState == 4) { return; }
-	request.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-	request.send(this.config.postData);
-}
-
-
-/**
- * Socket wrapper
- * @constructor
- */
-function NWTSocket() {
+	
+		nwt.socket.callbackMap[response.inject.socket_id](response);
+	});
 }
 
 
@@ -78,7 +80,15 @@ function NWTSocket() {
  * Makes a connection to the backend
  */
 NWTSocket.prototype.send = function() {
-	return new NWTSocketInstance(arguments);
+
+	var args = arguments;
+
+	this.lastSocketId++;
+
+	args[0] += '/socket_id/' + this.lastSocketId;
+	this.callbackMap[this.lastSocketId] = args[1].success;
+
+	return new NWTSocketInstance(args);
 };
 
 nwt.socket = new NWTSocket();
