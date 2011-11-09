@@ -5,7 +5,6 @@ fs = require('fs'),
 http = require('http'),
 io = require('socket.io'),
 path = require('path');
-console.log('Connections are', connections);
 require('fibers');
 
 var mimeTypes = {
@@ -17,44 +16,45 @@ var mimeTypes = {
     "min": "text/javascript",
     "css": "text/css"};
 
+var waitFor = function(obj, classKey) {
+	var current = Fiber.current,
+
+	// How long to sleep for
+	timeout = 5;
+	
+	// Set the timeout so the fiber will pick back up again
+	// We have a simple backoff strategy
+	var resumeFiber = function() {
+		if( obj[classKey] ) {
+			console.log('Object populated, resume fiber. Context is: ', global.context(), global.context().clientScripts);
+			current.run();
+		} else {
+			timeout += timeout;
+			setTimeout(resumeFiber, timeout);
+		}
+	};
+
+	setTimeout(resumeFiber, timeout);
+	yield();
+};
+
+
 function getServer() {
 
 	/**
 	 * Generic request handler for sockets or http requests
 	 */
 	function handleRequest(request, response) {
-console.log('Got request', request);
+
 		// Format data how we want it
 		request.hostName = request.hostName.replace(/^www\./, '').replace(/[:0-9]*$/, '');
-console.log('Got hostname', request.hostName);
-		var waitFor = function(obj, classKey) {
-			var current = Fiber.current,
-		
-			// How long to sleep for
-			timeout = 5;
-			
-			// Set the timeout so the fiber will pick back up again
-			// We have a simple backoff strategy
-			var resumeFiber = function() {
-				if( obj[classKey] ) {
-					console.log('Object populated, resume fiber. Context is: ', global.context(), global.context().clientScripts);
-					current.run();
-				} else {
-					timeout += timeout;
-					setTimeout(resumeFiber, timeout);
-				}
-			};
 
-			setTimeout(resumeFiber, timeout);
-			yield();
-		};
-	
 		Fiber(function(){
 
 			var definition = connections[request.hostName],
 				siteRoot;
 	
-			console.log('Host request for: ' + request.hostName);
+			//console.log('Host request for: ' + request.hostName);
 	
 			if( !definition ) {
 				definition = connections.example;
@@ -281,11 +281,14 @@ console.log('Got hostname', request.hostName);
 				resource: data.resource
 			};
 
-			handleRequest(mockRequestObject);
+			Fiber(function(){
+				handleRequest(mockRequestObject);
 
-			var responseData = JSON.parse(mockRequestObject.responseContent);
-
-			socket.emit('socketResponse', responseData);
+				waitFor(mockRequestObject, 'responseContent');
+				var responseData = JSON.parse(mockRequestObject.responseContent + '');
+	
+				socket.emit('socketResponse', responseData);
+			}).run();
 		});
 	});
 
