@@ -44,7 +44,7 @@ function getServer() {
 	/**
 	 * Generic request handler for sockets or http requests
 	 */
-	function handleRequest(request, response) {
+	function handleRequest(request, response, callback) {
 
 		// Format data how we want it
 		request.hostName = request.hostName.replace(/^www\./, '').replace(/[:0-9]*$/, '');
@@ -122,6 +122,7 @@ function getServer() {
 					],
 					config : definition,
 					hostName: request.hostName,
+					siteRoot : siteRoot,
 					request: {
 						controller: controller,
 						action: action
@@ -138,11 +139,11 @@ function getServer() {
 				// Handle special _nwt requests
 				// This calls an internal entrypoint to handle a private request
 				// E.g., _nwt/model_updater/model/ChatModel
-				global.context().siteRoot = siteRoot;
 				var layoutOverride = false;
 
 				if( pathname.indexOf('_nwt') !== -1  ) {
-					global.context().siteRoot = __dirname + '/';
+					// Set a private path, we don't want to overload siteRoot because that will cause loading issues
+					global.context().privatePath = __dirname + '/';
 					controller = 'private';
 					layoutOverride = 'empty';
 				}
@@ -197,6 +198,7 @@ function getServer() {
 						} else {
 							// Append empty string to always trigger the toString method
 							request.responseContent = NWTLayout + '';
+							callback();
 						}
 
 						// Reset the context holder
@@ -235,8 +237,9 @@ function getServer() {
 				}	
 
 				// Handle postdata, inject them into the params
-				if ( request.postData == 'POST' ) {
+				if ( request.postData ) {
 					params = processPostParams(request.postData);
+					console.log('got parsed params', params);
 					return paramsParsed();
 				} else {
 					return paramsParsed();
@@ -255,14 +258,17 @@ function getServer() {
 				resource: request.url
 			};
 
-			handleRequest(mockRequestObject, response);
+			handleRequest(mockRequestObject, response, function(){
 
-			if( mockRequestObject.responseContent ) {
-				// Return content like we usually do
-				response.writeHead(200, {"Content-Type": "text/html"});
-	
-				response.end(mockRequestObject.responseContent + '');
-			}
+				waitFor(mockRequestObject, 'responseContent');
+
+				if( mockRequestObject.responseContent ) {
+					// Return content like we usually do
+					response.writeHead(200, {"Content-Type": "text/html"});
+		
+					response.end(mockRequestObject.responseContent + '');
+				}
+			});
 
 		} catch(e) {
 			response.end('Could not load entrypoint at: ' + definition.folder + '/views/' + controller + '/' + action);
@@ -276,18 +282,26 @@ function getServer() {
 	var socket = io.listen(server);
 	socket.sockets.on('connection', function (socket) {
 		socket.on('socketRequest', function (data) {
+
+			// Right now we only support post through the socket
+			var qs = require('querystring')
+
+			data.postData = qs.parse(data.postData);
+
 			var mockRequestObject = {
 				hostName: url.parse(data.resource).pathname,
-				resource: data.resource
+				resource: data.resource,
+				postData: data.postData
 			};
 
 			Fiber(function(){
-				handleRequest(mockRequestObject);
+				handleRequest(mockRequestObject, null, function(){
 
-				waitFor(mockRequestObject, 'responseContent');
-				var responseData = JSON.parse(mockRequestObject.responseContent + '');
+					waitFor(mockRequestObject, 'responseContent');
+					var responseData = JSON.parse(mockRequestObject.responseContent + '');
 	
-				socket.emit('socketResponse', responseData);
+					socket.emit('socketResponse', responseData);
+				});
 			}).run();
 		});
 	});

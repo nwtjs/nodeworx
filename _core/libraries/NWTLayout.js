@@ -49,7 +49,11 @@
 	 */
 	NWTLayout.prototype._loadView = function(resource, params) {
 
-		var viewContent = fs.readFileSync(global.context().siteRoot + '/views/' + resource[0] + '/' + resource[1] + '.js');
+		var context = global.context(),
+
+		appPath = context.privatePath || context.siteRoot,
+
+		viewContent = fs.readFileSync(appPath + '/views/' + resource[0] + '/' + resource[1] + '.js');
 
 		// Trigger the toString() method
 		viewContent += '';
@@ -242,7 +246,7 @@
 	NWTLayout.prototype.toString = function() {
 		// Run the prefilter
 		if( this.definition && this.definition.preFilter !== undefined ) {
-			console.log('passing in params: ', this.params);
+			console.log('passing in params to prefilter: ', this.params);
 			this.definition.preFilter(this.params);
 		}
 

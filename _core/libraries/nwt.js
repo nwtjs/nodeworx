@@ -42,9 +42,11 @@
 		function NWTLoader() {}
 
 		NWTLoader.prototype.load = function(baseDir, className, instantiate) {
+
+			//console.log('folder', global.context().config.folder);
+			//console.log(global.context().siteRoot + '/' + baseDir + '/' + className + '.js');
+
 			if( path.existsSync(global.context().siteRoot + '/' + baseDir + '/' + className + '.js') ) {
-//				console.log('folder', global.context().config.folder);
-//				console.log(global.context().siteRoot + '/' + baseDir + '/' + className + '.js');
 				var classToLoad = require(global.context().siteRoot + '/' + baseDir + '/' + className + '.js')[className];
 			} else {
 				var classToLoad = require('./../' + baseDir + '/' + className + '.js')[className];
