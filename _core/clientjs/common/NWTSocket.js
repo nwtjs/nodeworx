@@ -23,7 +23,8 @@ function NWTSocketInstance(params) {
 	}
 
 	var data = {
-		resource : this.resource
+		resource : this.resource,
+		host: NWT_Config.host
 	};
 
 	data.postData = this.config.postData;

@@ -54,7 +54,7 @@ function getServer() {
 			var definition = connections[request.hostName],
 				siteRoot;
 	
-			//console.log('Host request for: ' + request.hostName);
+			console.log('Host request for: ' + request.hostName, definition);
 	
 			if( !definition ) {
 				definition = connections.example;
@@ -65,16 +65,21 @@ function getServer() {
 
 			var pathname = url.parse(request.resource).pathname,
 				filename = __dirname + '/..' + pathname;
-				reqParts = pathname.substring(1).split('/'),
+
+				// Strip any initial slashes in the pathname
+				pathname = (pathname[0] == '/' ? pathname.substring(1) : pathname),
+				reqParts = pathname.split('/'),
 				controller = reqParts[0].length > 0 && reqParts[0].length > 0 ? reqParts[0] : 'index',
 				action = reqParts[1] && reqParts[1].length > 0 && reqParts[1].length > 0 ? reqParts[1] : 'index',
 				content = '';
 	
 			// Special lookup for cache requests (hit the nwt folder)
 			if ( pathname.indexOf('cache/') === -1 && pathname.indexOf('_core') === -1 ) {
-				filename = siteRoot + pathname;
+				filename = siteRoot + '/' + pathname;
 			}
-	
+
+			console.log('controller:: ', controller, action);
+
 			console.log('Request for: ' , filename, ' | Path: ', pathname);
 			// If it's a request for a whitelisted file type, stream it
 			if( /\.[a-zA-Z]+$/.test(filename) ) {
@@ -280,8 +285,14 @@ function getServer() {
 
 	// Listen for socket connections
 	var socket = io.listen(server);
+	socket.enable('browser client minification');  // send minified client
+	socket.enable('browser client etag');          // apply etag caching logic based on version number
+	socket.enable('browser client gzip');          // gzip the file
+	socket.set('log level', 1);                    // reduce logging
 	socket.sockets.on('connection', function (socket) {
 		socket.on('socketRequest', function (data) {
+
+			console.log('Got socket data: ', data);
 
 			// Right now we only support post through the socket
 			var qs = require('querystring')
@@ -289,7 +300,7 @@ function getServer() {
 			data.postData = qs.parse(data.postData);
 
 			var mockRequestObject = {
-				hostName: url.parse(data.resource).pathname,
+				hostName: data.host,
 				resource: data.resource,
 				postData: data.postData
 			};
@@ -299,7 +310,9 @@ function getServer() {
 
 					waitFor(mockRequestObject, 'responseContent');
 					var responseData = JSON.parse(mockRequestObject.responseContent + '');
-	
+
+					console.log(responseData);
+
 					socket.emit('socketResponse', responseData);
 				});
 			}).run();
