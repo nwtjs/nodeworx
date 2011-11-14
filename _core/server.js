@@ -25,8 +25,11 @@ var waitFor = function(obj, classKey) {
 	// Set the timeout so the fiber will pick back up again
 	// We have a simple backoff strategy
 	var resumeFiber = function() {
+	
+		//console.log('Checking object for key: ', classKey, ' - ' , obj);
+
 		if( obj[classKey] ) {
-			console.log('Object populated, resume fiber. Context is: ', global.context(), global.context().clientScripts);
+			//console.log('Object populated, resume fiber. Context is: ', global.context(), global.context().clientScripts);
 			current.run();
 		} else {
 			timeout += timeout;
@@ -78,7 +81,7 @@ function getServer() {
 				filename = siteRoot + '/' + pathname;
 			}
 
-			console.log('controller:: ', controller, action);
+			//console.log('controller:: ', controller, action);
 
 			console.log('Request for: ' , filename, ' | Path: ', pathname);
 			// If it's a request for a whitelisted file type, stream it
@@ -202,8 +205,8 @@ function getServer() {
 
 						} else {
 							// Append empty string to always trigger the toString method
-							request.responseContent = NWTLayout + '';
-							callback();
+							//request.responseContent = NWTLayout + '';
+							callback(NWTLayout + '');
 						}
 
 						// Reset the context holder
@@ -263,16 +266,16 @@ function getServer() {
 				resource: request.url
 			};
 
-			handleRequest(mockRequestObject, response, function(){
+			handleRequest(mockRequestObject, response, function(responseContent){
 
-				waitFor(mockRequestObject, 'responseContent');
+				//waitFor(mockRequestObject, 'responseContent');
 
-				if( mockRequestObject.responseContent ) {
+				//if( mockRequestObject.responseContent ) {
 					// Return content like we usually do
 					response.writeHead(200, {"Content-Type": "text/html"});
 		
-					response.end(mockRequestObject.responseContent + '');
-				}
+					response.end(responseContent + '');
+				//}
 			});
 
 		} catch(e) {
@@ -306,10 +309,11 @@ function getServer() {
 			};
 
 			Fiber(function(){
-				handleRequest(mockRequestObject, null, function(){
+				handleRequest(mockRequestObject, null, function(responseContent){
 
-					waitFor(mockRequestObject, 'responseContent');
-					var responseData = JSON.parse(mockRequestObject.responseContent + '');
+					//waitFor(mockRequestObject, 'responseContent');
+
+					var responseData = JSON.parse(responseContent + '');
 
 					console.log(responseData);
 
