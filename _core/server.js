@@ -313,9 +313,13 @@ function getServer() {
 
 					//waitFor(mockRequestObject, 'responseContent');
 
-					var responseData = JSON.parse(responseContent + '');
-
-					console.log(responseData);
+					try {
+						var responseData = JSON.parse(responseContent + '');
+					} catch(e) {
+						console.log('Error sending response data');
+						var responseData = responseContent;
+						console.log(responseData);
+					}
 
 					socket.emit('socketResponse', responseData);
 				});
