@@ -214,6 +214,14 @@ function getServer() {
 							callback(NWTLayout + '');
 						}
 
+						// Any cleanup callbacks would be in the context().cleanup
+						if( global.context().cleanup ) {
+							var toClean = global.context().cleanup;
+							for (var i = 0, cleanup; cleanup = toClean[i] ; i += 1) {
+								cleanup();
+							}			
+						}
+
 						// Reset the context holder
 						console.log('Resetting contextObject after fiber.');
 						contextObject = {};
@@ -257,14 +265,6 @@ function getServer() {
 				} else {
 					return paramsParsed();
 				}
-			}
-
-			// Any cleanup callbacks would be in the context().cleanup
-			if( global.context().cleanup ) {
-				var toClean = global.context().cleanup;
-				for (var i = 0, cleanup; cleanup = toClean[i] ; i += 1) {
-					toClean();
-				}			
 			}
 		}).run(); // End Fiber() wrap
 	}
