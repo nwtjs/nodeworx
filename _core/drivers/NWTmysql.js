@@ -15,6 +15,12 @@ function NWTmysql(config, model) {
 
 	this.client.query('USE '+config.database);
 
+	var mythis = this;
+
+	global.context().cleanup.push(function() {
+		mythis.client.end();
+	});
+
 	return this;
 }
 

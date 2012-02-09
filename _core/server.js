@@ -137,7 +137,12 @@ function getServer() {
 					},
 					fiber: {
 						waitFor: waitFor
-					}
+					},
+
+					// What do we need to do at the end of the request?
+					// Disconenct DBs, etc
+					// Array of callbacks
+					cleanup: []
 				};
 
 				global.context = function() {
@@ -252,6 +257,14 @@ function getServer() {
 				} else {
 					return paramsParsed();
 				}
+			}
+
+			// Any cleanup callbacks would be in the context().cleanup
+			if( global.context().cleanup ) {
+				var toClean = global.context().cleanup;
+				for (var i = 0, cleanup; cleanup = toClean[i] ; i += 1) {
+					toClean();
+				}			
 			}
 		}).run(); // End Fiber() wrap
 	}
